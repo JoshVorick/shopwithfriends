@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,6 +27,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,15 +115,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         boolean cancel = false;
         View focusView = null;
 
-
+        /*
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        }
+        }*/
 
         // Check for a valid email address.
+        /*
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -130,7 +134,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             focusView = mEmailView;
             cancel = true;
         }
-
+        */
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -268,15 +272,29 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             } catch (InterruptedException e) {
                 return false;
             }
+            ArrayList<String> stringo = new ArrayList<String>();
+            stringo.add("user:pass");
+            try{
+                BufferedReader read = new BufferedReader(new InputStreamReader(openFileInput("users")));
+                while(read.ready()) {
+                    stringo.add(read.readLine());
+                }
+            } catch(Exception e) {
 
-            for (String credential : DUMMY_CREDENTIALS) {
+            }
+            for (String credential : stringo) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
+                    if (pieces[1].equals(mPassword)) {
+                        Intent intent = new Intent(LoginActivity.this, MainScreen.class);
+                        startActivity(intent);
+                    }
                     return pieces[1].equals(mPassword);
                 }
             }
-
+            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+            startActivity(intent);
             // TODO: register the new account here.
             return true;
         }
