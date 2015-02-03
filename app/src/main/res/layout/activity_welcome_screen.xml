@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:text="@string/register"
         android:id="@+id/button2"
+        android:onClick="register"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true" />
 
