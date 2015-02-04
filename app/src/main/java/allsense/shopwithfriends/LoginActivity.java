@@ -289,12 +289,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     if (pieces[1].equals(mPassword)) {
                         Intent intent = new Intent(LoginActivity.this, MainScreen.class);
                         startActivity(intent);
+                        finish();
                     }
                     return pieces[1].equals(mPassword);
                 }
             }
             Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
             // TODO: register the new account here.
             return true;
         }

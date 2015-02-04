@@ -42,6 +42,7 @@ public class Register extends ActionBarActivity {
         }
         Intent intent = new Intent(Register.this, MainScreen.class);
         startActivity(intent);
+        finish();
     }
 
     private EditText mPasswordView;
