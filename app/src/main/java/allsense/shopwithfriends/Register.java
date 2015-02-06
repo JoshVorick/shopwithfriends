@@ -18,6 +18,11 @@ import java.util.ArrayList;
 
 public class Register extends ActionBarActivity {
 
+    /**
+     * The method for adding a user when the register button is clicked
+     * With valid parameters in the three fields, a new user will be added to the "database"
+     * @param view The view given by the button
+     */
     public void reger(View view) {
         String pw = mPasswordView.getText().toString();
         String user = mUsernameView.getText().toString();
