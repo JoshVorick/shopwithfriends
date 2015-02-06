@@ -9,10 +9,19 @@ import android.view.View;
 
 
 public class WelcomeScreen extends ActionBarActivity {
+    /**
+     * Sends user to the register page
+     * @param view The view given by the button
+     */
     public void register(View view) {
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
     }
+
+    /**
+     * Sends user to the login page
+     * @param view The veiw given by the button
+     */
     public void logIn(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

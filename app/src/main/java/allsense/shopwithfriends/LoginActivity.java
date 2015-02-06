@@ -98,6 +98,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
+     * Currently, user and pass are hardcoded in but the list also draws from the list created by the register method
      */
     public void attemptLogin() {
         if (mAuthTask != null) {
