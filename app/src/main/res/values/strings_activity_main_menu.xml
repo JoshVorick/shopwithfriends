@@ -1,0 +1,4 @@
+<resources>
+    <string name="title_activity_main_menu">Main Menu</string>
+    <string name="main_menu_friends">Friends</string>
+</resources>

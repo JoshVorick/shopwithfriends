@@ -4,19 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
 
-public class Register extends ActionBarActivity {
+public class RegisterActivity extends ActionBarActivity {
+
+    private EditText mPasswordView;
+    private EditText mUsernameView;
+    private EditText mNameView;
+    private ArrayList<String> regs;
 
     /**
      * The method for adding a user when the register button is clicked
@@ -27,34 +32,28 @@ public class Register extends ActionBarActivity {
         String pw = mPasswordView.getText().toString();
         String user = mUsernameView.getText().toString();
         String name = mNameView.getText().toString();
-        try{
+        try {
             BufferedReader read = new BufferedReader(new InputStreamReader(openFileInput("users")));
-            while(read.ready()) {
+            while (read.ready()) {
                 regs.add(read.readLine());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
 
         }
 
-        regs.add(user+":"+pw);
+        regs.add(user + ":" + pw);
+
         try {
             PrintStream out = new PrintStream(openFileOutput("users", Context.MODE_PRIVATE));
             for (String a : regs) {
                 out.println(a);
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
 
         }
-        Intent intent = new Intent(Register.this, MainScreen.class);
+        Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);
-        finish();
     }
-
-    private EditText mPasswordView;
-    private EditText mUsernameView;
-    private EditText mNameView;
-    private ArrayList<String> regs;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +67,7 @@ public class Register extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -80,7 +77,7 @@ public class Register extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
