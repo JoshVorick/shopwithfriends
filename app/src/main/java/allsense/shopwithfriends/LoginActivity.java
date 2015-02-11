@@ -16,8 +16,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -36,15 +39,15 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "foo@example.com:hello", "bar@example.com:world"
+//    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -87,6 +90,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
     }
 
     private void populateAutoComplete() {
@@ -150,8 +158,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.matches("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}");
     }
 
     private boolean isPasswordValid(String password) {
@@ -280,24 +287,26 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 while(read.ready()) {
                     stringo.add(read.readLine());
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
 
             }
+
             for (String credential : stringo) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
-                    if (pieces[1].equals(mPassword)) {
-                        Intent intent = new Intent(LoginActivity.this, MainScreen.class);
+                    boolean matches = pieces[1].equals(mPassword);
+                    if (matches) {
+                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         startActivity(intent);
-                        finish();
                     }
-                    return pieces[1].equals(mPassword);
+                    return matches;
                 }
             }
-            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            // TODO: why is a new LoginActivity being created?
+//            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
             // TODO: register the new account here.
             return true;
         }
