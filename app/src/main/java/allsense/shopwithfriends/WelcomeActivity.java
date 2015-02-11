@@ -8,36 +8,35 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class WelcomeScreen extends ActionBarActivity {
+public class WelcomeActivity extends ActionBarActivity {
+
     /**
      * Sends user to the register page
      * @param view The view given by the button
      */
     public void register(View view) {
-        Intent intent = new Intent(this, Register.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 
     /**
      * Sends user to the login page
-     * @param view The veiw given by the button
+     * @param view The view given by the button
      */
     public void logIn(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome_screen);
+        setContentView(R.layout.activity_welcome);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_welcome_screen, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class WelcomeScreen extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
