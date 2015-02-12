@@ -21,67 +21,68 @@ public class RegisterActivity extends ActionBarActivity {
     private EditText mPasswordView;
     private EditText mUsernameView;
     private EditText mNameView;
-    private ArrayList<String> regs;
+    private EditText mEmailView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        mPasswordView = (EditText) findViewById(R.id.passwordEditText);
+        mUsernameView = (EditText) findViewById(R.id.usernameEditText);
+        mNameView = (EditText) findViewById(R.id.nameEditText);
+        mEmailView = (EditText) findViewById(R.id.emailEditText);
+    }
 
     /**
      * The method for adding a user when the register button is clicked
      * With valid parameters in the three fields, a new user will be added to the "database"
      * @param view The view given by the button
      */
-    public void reger(View view) {
-        String pw = mPasswordView.getText().toString();
-        String user = mUsernameView.getText().toString();
+    public void attemptRegistration(View view) {
         String name = mNameView.getText().toString();
-        try {
-            BufferedReader read = new BufferedReader(new InputStreamReader(openFileInput("users")));
-            while (read.ready()) {
-                regs.add(read.readLine());
-            }
-        } catch (Exception e) {
+        String email = mEmailView.getText().toString();
+        String username = mUsernameView.getText().toString();
+        String password = mPasswordView.getText().toString();
 
+        View errorFocusView = null;
+
+        if (!User.isValidPassword(password)) {
+            mUsernameView.setError(getText(R.string.register_invalid_password));
+            errorFocusView = mPasswordView;
         }
 
-        regs.add(user + ":" + pw);
-
-        try {
-            PrintStream out = new PrintStream(openFileOutput("users", Context.MODE_PRIVATE));
-            for (String a : regs) {
-                out.println(a);
-            }
-        } catch (Exception e) {
-
+        if (User.usernameExists(username)) {
+            mUsernameView.setError(getText(R.string.register_username_exists));
+            errorFocusView = mUsernameView;
+        } else if (!User.isValidUsername(username)) {
+            mUsernameView.setError(getText(R.string.register_invalid_username));
+            errorFocusView = mUsernameView;
         }
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        mPasswordView = (EditText) findViewById(R.id.editText2);
-        mUsernameView = (EditText) findViewById(R.id.editText);
-        mNameView = (EditText) findViewById(R.id.editText3);
-        regs = new ArrayList<String>();
+        if (!User.isValidEmail(email)) {
+            mEmailView.setError(getText(R.string.register_invalid_email));
+            errorFocusView = mEmailView;
+        }
+
+        if (!User.isValidName(name)) {
+            mNameView.setError(getText(R.string.register_invalid_name));
+            errorFocusView = mNameView;
+        }
+
+        if (errorFocusView != null) {
+            errorFocusView.requestFocus();
+        } else {
+            User user = new User(name, email, username, password);
+            User.currentUser = user;
+            User.addUser(user);
+
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        // noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
