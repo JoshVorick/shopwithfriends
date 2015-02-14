@@ -3,6 +3,7 @@ package allsense.shopwithfriends;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -28,14 +29,19 @@ public class WelcomeActivity extends ActionBarActivity {
     }
 
     public void deleteUsers(View view) {
-        User.clearUsers();
+        User.deleteAllUsers();
+        logAllUsers();
+    }
+
+    private void logAllUsers() {
+        Log.d("SWF", "all users: " + User.allUsers());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        User.init(getApplicationContext());
+        logAllUsers();
     }
 
     @Override

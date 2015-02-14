@@ -3,6 +3,7 @@ package allsense.shopwithfriends;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +25,5 @@ public class MainMenuActivity extends ActionBarActivity {
     public void toFriends(View view) {
         Intent intent = new Intent(this, FriendsActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        User.currentUser = null;
     }
 }

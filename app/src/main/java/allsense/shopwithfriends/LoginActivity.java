@@ -107,8 +107,10 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         View errorFocusView = null;
 
-        if (User.usernameExists(username)) {
-            if (!User.usernamePasswordMatch(username, password)) {
+        User user = User.userForUsername(username);
+
+        if (user != null) {
+            if (user.password().equals(password)) {
                 errorFocusView = mPasswordView;
                 mPasswordView.setError(getString(R.string.login_error_incorrect_password));
             }
@@ -124,9 +126,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
-            mAuthTask.execute();
+//            showProgress(true);
+//            mAuthTask = new UserLoginTask(username, password);
+//            mAuthTask.execute();
+            User.currentUser = user;
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -175,7 +180,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
                 // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+                        " = ?", new String[] {ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
 
                 // Show primary email addresses first. Note that there won't be
@@ -240,12 +245,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
             }
 
-            for (User user : User.allUsers) {
+            for (User user : User.allUsers()) {
                 if (user.username().equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     boolean matches = user.password().equals(mPassword);
@@ -257,11 +262,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
                     return matches;
                 }
             }
-            // TODO: why is a new LoginActivity being created?
-//            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-            // TODO: register the new account here.
             return true;
         }
 

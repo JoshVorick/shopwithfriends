@@ -3,87 +3,55 @@ package allsense.shopwithfriends;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    public static List<User> allUsers;
     private static final String fileName = "USERS";
     private static Context appContext;
+    private static UserDataSource dataSource;
 
     public static User currentUser;
-
-    public static int numUsers() {
-        return allUsers.size();
-    }
 
     public static void init(final Context context) {
         if (appContext == null) {
             appContext = context;
-            allUsers = new ArrayList<User>();
-            FileInputStream in;
-            try {
-                in = appContext.openFileInput(fileName);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                while (true) {
-                    String name = br.readLine();
-                    if (name == null || name.length() == 0) {
-                        break;
-                    }
-                    String email = br.readLine();
-                    String username = br.readLine();
-                    String password = br.readLine();
-                    User user = new User(name, email, username, password);
-                    addUser(user);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            dataSource = new UserDataSource(context);
+            dataSource.open();
         }
     }
 
-    public static void clearUsers() {
-        Log.d("SWF", "clear all users");
-        FileOutputStream out;
-        try {
-            out = appContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void deinit() {
+        if (dataSource != null) {
+            dataSource.close();
         }
-        allUsers.clear();
     }
 
-    public static void addUser(final User user) {
-        allUsers.add(user);
+    public static List<User> allUsers() {
+        return dataSource.allUsers();
+    }
 
-        FileOutputStream out;
+    public static void deleteAllUsers() {
+        Log.d("SWF", "delete all users");
+        dataSource.deleteAllUsers();
+    }
 
-        try {
-            out = appContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            out.write(user.name.getBytes());
-            out.write('\n');
-            out.write(user.email.getBytes());
-            out.write('\n');
-            out.write(user.username.getBytes());
-            out.write('\n');
-            out.write(user.password.getBytes());
-            out.write('\n');
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public static User addUser(final String name, final String email, final String username, final String password) {
+        User user = dataSource.createUser(name, email, username, password);
         Log.d("SWF", "add user " + user);
+        return user;
+    }
+
+    public static List<User> currentFriends() {
+        return dataSource.friends(currentUser);
+    }
+
+    public static List<User> currentNotFriends() {
+        return dataSource.notFriends(currentUser);
     }
 
     public static boolean usernameExists(final String username) {
-        for (User user : allUsers) {
+        for (User user : allUsers()) {
             if (user.username().equals(username)) {
                 return true;
             }
@@ -91,14 +59,23 @@ public class User {
         return false;
     }
 
-    public static boolean usernamePasswordMatch(final String username, final String password) {
-        for (User user : allUsers) {
+    public static User userForUsername(final String username) {
+        for (User user : allUsers()) {
             if (user.username().equals(username)) {
-                return user.password().equals(password);
+                return user;
             }
         }
-        return false;
+        return null;
     }
+
+//    public static boolean usernamePasswordMatch(final String username, final String password) {
+//        for (User user : allUsers()) {
+//            if (user.username().equals(username)) {
+//                return user.password().equals(password);
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean isValidEmail(final String email) {
         return email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]+\\.[A-Za-z0-9]+");
@@ -120,8 +97,9 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private long id;
 
-    public User(final String name, final String email, final String username, final String password) {
+    public User(final String name, final String email, final String username, final String password, final long id) {
         if (name == null) {
             throw new IllegalArgumentException("name is null");
         }
@@ -138,6 +116,7 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.id = id;
     }
 
     public String username() {
@@ -156,8 +135,26 @@ public class User {
         return email;
     }
 
+    public long id() {
+        return id;
+    }
+
+    public void addFriend(final User friend) {
+        dataSource.addFriends(this, friend);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            User other = (User) o;
+            return other.id == this.id;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return username;
+//        return username + ": " + name;
+        return name + ", " + email + ", " + username + ", " + password + ", " + id;
     }
 }

@@ -72,9 +72,13 @@ public class RegisterActivity extends ActionBarActivity {
         if (errorFocusView != null) {
             errorFocusView.requestFocus();
         } else {
-            User user = new User(name, email, username, password);
+            User user = User.addUser(name, email, username, password);
             User.currentUser = user;
-            User.addUser(user);
+
+            mNameView.setText("");
+            mEmailView.setText("");
+            mUsernameView.setText("");
+            mPasswordView.setText("");
 
             Intent intent = new Intent(this, MainMenuActivity.class);
             startActivity(intent);
