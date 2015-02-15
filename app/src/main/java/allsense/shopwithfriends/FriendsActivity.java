@@ -1,36 +1,74 @@
 package allsense.shopwithfriends;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.List;
 
 
 public class FriendsActivity extends ActionBarActivity {
 
+    private ListView listView;
+    private ArrayAdapter<User> adapter;
+    private List<User> adapterList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_friends);
+
+        adapterList = User.currentFriends();
+        Log.d("SWF", "current user friends: " + adapterList);
+
+        adapter = new ArrayAdapter<User>(this, R.layout.activity_friends_cell, adapterList);
+
+        listView = (ListView) findViewById(R.id.friends_list_view);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("SWF", "selected friend " + adapterList.get(position));
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("SWF", "refresh friends list");
+        refreshList();
+    }
+
+    public void refreshList() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_friends, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.friends_menu_add_friend:
+                Intent intent = new Intent(this, AddFriendActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

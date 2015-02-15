@@ -1,3 +1,4 @@
 <resources>
     <string name="title_activity_friends">Friends</string>
+    <string name="friends_menu_add_friend">Add Friend</string>
 </resources>

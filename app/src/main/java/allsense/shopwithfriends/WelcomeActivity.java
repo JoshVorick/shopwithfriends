@@ -3,8 +3,8 @@ package allsense.shopwithfriends;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 
@@ -28,29 +28,24 @@ public class WelcomeActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void deleteUsers(View view) {
+        User.deleteAllUsers();
+        logAllUsers();
+    }
+
+    private void logAllUsers() {
+        Log.d("SWF", "all users: " + User.allUsers());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        logAllUsers();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        // noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
