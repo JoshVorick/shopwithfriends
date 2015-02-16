@@ -31,26 +31,31 @@
         android:orientation="horizontal"
         android:gravity="center">
         <Button
+            android:id="@+id/display_friend_button_1"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate1"
             android:text="1" />
         <Button
+            android:id="@+id/display_friend_button_2"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate2"
             android:text="2" />
         <Button
+            android:id="@+id/display_friend_button_3"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate3"
             android:text="3" />
         <Button
+            android:id="@+id/display_friend_button_4"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate4"
             android:text="4" />
         <Button
+            android:id="@+id/display_friend_button_5"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate5"

@@ -194,6 +194,23 @@ public class UserDataSource {
         }
     }
 
+    public int rating(final User rater, final User rated) {
+        Cursor cursor = queryFriends(
+                MySQLiteHelper.COLUMN_FRIEND_1 + " = " + rater.id() + " AND " +
+                MySQLiteHelper.COLUMN_FRIEND_2 + " = " + rated.id()
+        );
+        cursor.moveToFirst();
+        try {
+            if (cursor.isAfterLast()) {
+                return 0;
+            } else {
+                return cursor.getInt(2);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
     public void addFriends(final User user1, final User user2) {
         Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id() +
                 " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id());

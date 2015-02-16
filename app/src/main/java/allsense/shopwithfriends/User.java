@@ -131,6 +131,10 @@ public class User {
         return dataSource.rating(this);
     }
 
+    public int ratingForFriend(final User friend) {
+        return dataSource.rating(this, friend);
+    }
+
     public void rate(final User friend, final int rating) {
         dataSource.rate(this, friend, rating);
     }

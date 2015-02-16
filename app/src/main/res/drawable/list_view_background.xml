@@ -4,5 +4,5 @@
         android:color="@color/background_material_light"/>
     <stroke
         android:width="2dip"
-        android:color="#888888" />
+        android:color="@color/background_dark" />
 </shape>
