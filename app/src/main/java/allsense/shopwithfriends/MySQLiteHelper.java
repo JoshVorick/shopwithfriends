@@ -23,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Database creation sql statement
+    // statements to create the tables
     private static final String DATABASE_CREATE_USERS =
             "create table " +
                     TABLE_USERS +
@@ -64,11 +64,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * deletes all rows in all tables, but not the tables themselves
+     * @param db  the database
+     */
     public void deleteAllData(SQLiteDatabase db) {
         db.delete(TABLE_USERS, null, null);
         db.delete(TABLE_FRIENDS, null, null);
     }
 
+    /**
+     * deletes all tables in the database
+     * @param db  the database
+     */
     public void deleteDatabase(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FRIENDS);

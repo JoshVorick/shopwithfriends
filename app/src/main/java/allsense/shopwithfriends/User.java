@@ -127,10 +127,19 @@ public class User {
         return id;
     }
 
+    /**
+     *
+     * @return the average rating of this user
+     */
     public int rating() {
         return dataSource.rating(this);
     }
 
+    /**
+     *
+     * @param friend
+     * @return what this user rated the friend
+     */
     public int ratingForFriend(final User friend) {
         return dataSource.rating(this, friend);
     }

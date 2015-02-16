@@ -34,14 +34,29 @@ public class UserDataSource {
         dbHelper = new MySQLiteHelper(context);
     }
 
+    /**
+     * allows the database to be used
+     * @throws SQLiteException
+     */
     public void open() throws SQLiteException {
         database = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * closes the database
+     */
     public void close() {
         dbHelper.close();
     }
 
+    /**
+     * creates a user with the parameters, stores it in the database, and returns it
+     * @param name
+     * @param email
+     * @param username
+     * @param password
+     * @return  the new user
+     */
     public User createUser(final String name, final String email, final String username, final String password) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_NAME, name);
@@ -56,26 +71,48 @@ public class UserDataSource {
         return user;
     }
 
+    /**
+     * deletes the specified user from the database
+     * @param user
+     */
     public void deleteUser(final User user) {
         long id = user.id();
         System.out.println("deleting user " + user);
         database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
+    /**
+     * remakes the whole database, deleting rows in the process
+     */
     public void resetDatabase() {
         Log.d("SWF", "reset database");
         dbHelper.deleteDatabase(database);
         dbHelper.onCreate(database);
     }
 
+    /**
+     * returns all columns in the table USERS that match the selection
+     * @param selection  the condition to match against, null for all rows
+     * @return  all rows that match selection
+     */
     public Cursor queryUsers(final String selection) {
         return database.query(MySQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, selection, null, null, null, null);
     }
 
+    /**
+     * returns all columns in the table FRIENDS that match the selection
+     * @param selection  the condition to match against, null for all rows
+     * @return  all rows that match selection
+     */
     public Cursor queryFriends(final String selection) {
         return database.query(MySQLiteHelper.TABLE_FRIENDS, ALL_COLUMNS_FRIENDS, selection, null, null, null, null);
     }
 
+    /**
+     * returns all friends of the user according to the table FRIENDS
+     * @param user  the user to find friends
+     * @return  a list of friends of the user
+     */
     public List<User> friends(final User user) {
         List<User> friends = new ArrayList<User>();
 
@@ -95,6 +132,11 @@ public class UserDataSource {
         return friends;
     }
 
+    /**
+     * returns all people that are not the user and not in the user's friends
+     * @param user  the user to find not friends
+     * @return  a list of anyone who is not the user's friend
+     */
     public List<User> notFriends(final User user) {
         List<User> allUsers = allUsers();
         List<User> friends = friends(user);
@@ -103,10 +145,17 @@ public class UserDataSource {
         return allUsers;
     }
 
+    /**
+     * deletes all rows from the database
+     */
     public void deleteAllUsers() {
         dbHelper.deleteAllData(database);
     }
 
+    /**
+     *
+     * @return  a list of all users in the database USERS
+     */
     public List<User> allUsers() {
         List<User> users = new ArrayList<User>();
 
@@ -122,6 +171,11 @@ public class UserDataSource {
         return users;
     }
 
+    /**
+     * finds the user with the username in the table USERS
+     * @param username  the username to find
+     * @return  the user with the username passed in, null if not found
+     */
     public User userForUsername(final String username) {
         Cursor cursor = queryUsers(MySQLiteHelper.COLUMN_USERNAME + " = " + '\'' + username + '\'');
         cursor.moveToFirst();
@@ -136,6 +190,11 @@ public class UserDataSource {
         }
     }
 
+    /**
+     * finds the user with the id in the table USERS
+     * @param id  the id to find
+     * @return  the user with the id passed in, null if not found
+     */
     public User userForID(final long id) {
         Cursor cursor = queryUsers(MySQLiteHelper.COLUMN_ID + " = " + id);
         cursor.moveToFirst();
@@ -150,6 +209,11 @@ public class UserDataSource {
         }
     }
 
+    /**
+     * returns the user at the current position of the inputted cursor
+     * @param cursor  a cursor from the table USERS
+     * @return  the user at the current position of the cursor
+     */
     private User userAtCursor(Cursor cursor) {
         long id = cursor.getLong(0);
         String name = cursor.getString(1);
@@ -160,6 +224,12 @@ public class UserDataSource {
         return user;
     }
 
+    /**
+     * write the rating that one user gives another user
+     * @param rater  the user rating
+     * @param rated  the user being rated
+     * @param rating  the rating
+     */
     public void rate(final User rater, final User rated, final int rating) {
         if (rating < 1 || rating > 5) {
             throw new IllegalArgumentException("illegal rating: " + rating);
@@ -172,6 +242,11 @@ public class UserDataSource {
                 , null);
     }
 
+    /**
+     * finds the average rating of the user from all ratings not including 0
+     * @param user  the user to find the rating
+     * @return  the rating
+     */
     public int rating(final User user) {
         Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user.id());
         cursor.moveToFirst();
@@ -194,6 +269,12 @@ public class UserDataSource {
         }
     }
 
+    /**
+     * returns the rating that one user rated another user
+     * @param rater  the user rating
+     * @param rated  the user being rated
+     * @return  the rating
+     */
     public int rating(final User rater, final User rated) {
         Cursor cursor = queryFriends(
                 MySQLiteHelper.COLUMN_FRIEND_1 + " = " + rater.id() + " AND " +
@@ -211,6 +292,11 @@ public class UserDataSource {
         }
     }
 
+    /**
+     * makes the two users friends if they are not already friends
+     * @param user1
+     * @param user2
+     */
     public void addFriends(final User user1, final User user2) {
         Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id() +
                 " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id());

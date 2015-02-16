@@ -2,6 +2,9 @@ package allsense.shopwithfriends;
 
 import android.app.Application;
 
+/**
+ * subclass of Application so we run code only once
+ */
 public class SWFApplication extends Application {
     public static boolean AUTO_LOGIN = true;
 

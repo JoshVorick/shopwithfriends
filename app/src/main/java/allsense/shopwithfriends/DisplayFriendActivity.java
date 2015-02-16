@@ -1,7 +1,7 @@
 package allsense.shopwithfriends;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -31,14 +31,18 @@ public class DisplayFriendActivity extends ActionBarActivity {
 
         setTitle(friend.username());
 
-        setUI();
-    }
-
-    private void setUI() {
         TextView nameTextView = (TextView) findViewById(R.id.display_friend_name);
         nameTextView.setText("Name: " + friend.name());
         TextView emailTextView = (TextView) findViewById(R.id.display_friend_email);
         emailTextView.setText("Email: " + friend.email());
+
+        setRatingUI();
+    }
+
+    /**
+     * updates the shown rating and highlights the corresponding button
+     */
+    private void setRatingUI() {
         TextView ratingTextView = (TextView) findViewById(R.id.display_friend_rating);
         ratingTextView.setText("Rating: " + friend.rating());
 
@@ -54,32 +58,40 @@ public class DisplayFriendActivity extends ActionBarActivity {
 
     public void rate1(View view) {
         rating = 1;
-        User.currentUser.rate(friend, rating);
-        setUI();
+        rateFriend();
     }
 
     public void rate2(View view) {
         rating = 2;
-        User.currentUser.rate(friend, rating);
-        setUI();
+        rateFriend();
     }
 
     public void rate3(View view) {
         rating = 3;
-        User.currentUser.rate(friend, rating);
-        setUI();
+        rateFriend();
     }
 
     public void rate4(View view) {
         rating = 4;
-        User.currentUser.rate(friend, rating);
-        setUI();
+        rateFriend();
     }
 
     public void rate5(View view) {
         rating = 5;
-        User.currentUser.rate(friend, rating);
-        setUI();
+        rateFriend();
+    }
+
+    /**
+     * writes new rating into database
+     */
+    public void rateFriend() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User.currentUser.rate(friend, rating);
+                setRatingUI();
+            }
+        }).start();
     }
 
     @Override
