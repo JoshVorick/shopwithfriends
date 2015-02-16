@@ -49,6 +49,11 @@
             android:label="@string/title_activity_add_friend"
             android:parentActivityName=".FriendsActivity" >
         </activity>
+        <activity
+            android:name=".DisplayFriendActivity"
+            android:label="@string/title_activity_display_friend"
+            android:parentActivityName=".FriendsActivity" >
+        </activity>
     </application>
 
 </manifest>

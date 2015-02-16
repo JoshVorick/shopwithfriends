@@ -27,6 +27,7 @@ public class UserDataSource {
     private static final String[] ALL_COLUMNS_FRIENDS = {
             MySQLiteHelper.COLUMN_FRIEND_1,
             MySQLiteHelper.COLUMN_FRIEND_2,
+            MySQLiteHelper.COLUMN_RATING,
     };
 
     public UserDataSource(Context context) {
@@ -48,7 +49,7 @@ public class UserDataSource {
         values.put(MySQLiteHelper.COLUMN_USERNAME, username);
         values.put(MySQLiteHelper.COLUMN_PASSWORD, password);
         long insertID = database.insert(MySQLiteHelper.TABLE_USERS, null, values);
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, MySQLiteHelper.COLUMN_ID + " = " + insertID, null, null, null, null);
+        Cursor cursor = queryUsers(MySQLiteHelper.COLUMN_ID + " = " + insertID);
         cursor.moveToFirst();
         User user = userAtCursor(cursor);
         cursor.close();
@@ -61,22 +62,34 @@ public class UserDataSource {
         database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
+    public void resetDatabase() {
+        Log.d("SWF", "reset database");
+        dbHelper.deleteDatabase(database);
+        dbHelper.onCreate(database);
+    }
+
+    public Cursor queryUsers(final String selection) {
+        return database.query(MySQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, selection, null, null, null, null);
+    }
+
+    public Cursor queryFriends(final String selection) {
+        return database.query(MySQLiteHelper.TABLE_FRIENDS, ALL_COLUMNS_FRIENDS, selection, null, null, null, null);
+    }
+
     public List<User> friends(final User user) {
         List<User> friends = new ArrayList<User>();
 
-        long id = user.id();
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_FRIENDS, ALL_COLUMNS_FRIENDS, MySQLiteHelper.COLUMN_FRIEND_1 + " = " + id + " OR " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + id, null, null, null, null);
+        Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user.id());
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long id1 = cursor.getLong(0);
-            long id2 = cursor.getLong(1);
-            long otherID = id1 != id ? id1 : id2;
-            User friend = userForID(otherID);
+            long friendID = cursor.getLong(1);
+            User friend = userForID(friendID);
             friends.add(friend);
             cursor.moveToNext();
         }
+
         cursor.close();
 
         return friends;
@@ -91,13 +104,13 @@ public class UserDataSource {
     }
 
     public void deleteAllUsers() {
-        dbHelper.deleteAll(database);
+        dbHelper.deleteAllData(database);
     }
 
     public List<User> allUsers() {
         List<User> users = new ArrayList<User>();
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, null, null, null, null, null);
+        Cursor cursor = queryUsers(null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             User user = userAtCursor(cursor);
@@ -109,23 +122,32 @@ public class UserDataSource {
         return users;
     }
 
-    public User userForID(final long id) {
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, MySQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+    public User userForUsername(final String username) {
+        Cursor cursor = queryUsers(MySQLiteHelper.COLUMN_USERNAME + " = " + '\'' + username + '\'');
         cursor.moveToFirst();
-        User user = null;
-        while (!cursor.isAfterLast()) {
-            if (user == null) {
-                user = userAtCursor(cursor);
+        try {
+            if (!cursor.isAfterLast()) {
+                return userAtCursor(cursor);
             } else {
-                Log.e("SWF", "two users with same id");
-                Log.e("SWF", user.toString());
-                Log.e("SWF", userAtCursor(cursor).toString());
-                Log.e("SWF", "all users: " + allUsers());
-                throw new RuntimeException();
+                return null;
             }
-            cursor.moveToNext();
+        } finally {
+            cursor.close();
         }
-        return user;
+    }
+
+    public User userForID(final long id) {
+        Cursor cursor = queryUsers(MySQLiteHelper.COLUMN_ID + " = " + id);
+        cursor.moveToFirst();
+        try {
+            if (!cursor.isAfterLast()) {
+                return userAtCursor(cursor);
+            } else {
+                return null;
+            }
+        } finally {
+            cursor.close();
+        }
     }
 
     private User userAtCursor(Cursor cursor) {
@@ -138,10 +160,75 @@ public class UserDataSource {
         return user;
     }
 
+    public void rate(final User rater, final User rated, final int rating) {
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("illegal rating: " + rating);
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MySQLiteHelper.COLUMN_RATING, rating);
+        database.update(MySQLiteHelper.TABLE_FRIENDS, contentValues,
+                MySQLiteHelper.COLUMN_FRIEND_1 + " = " + rater.id() +
+                        " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + rated.id()
+                , null);
+    }
+
+    public int rating(final User user) {
+        Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user.id());
+        cursor.moveToFirst();
+        double total = 0.0;
+        int count = 0;
+        while (!cursor.isAfterLast()) {
+            int rating = cursor.getInt(2);
+            if (rating != 0) {
+                total += rating;
+                count++;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        if (count == 0) {
+            return 0;
+        } else {
+            double rating = total / count;
+            return (int) (rating + 0.5);
+        }
+    }
+
     public void addFriends(final User user1, final User user2) {
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_FRIEND_1, user1.id());
-        values.put(MySQLiteHelper.COLUMN_FRIEND_2, user2.id());
-        database.insert(MySQLiteHelper.TABLE_FRIENDS, null, values);
+        Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id() +
+                " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id());
+
+        try {
+            if (!cursor.isAfterLast()) {
+                Log.e("SWF", user1 + " and " + user2 + " are already friends");
+                return;
+            }
+        } finally {
+            cursor.close();
+        }
+
+        ContentValues values1 = new ContentValues();
+        values1.put(MySQLiteHelper.COLUMN_FRIEND_1, user1.id());
+        values1.put(MySQLiteHelper.COLUMN_FRIEND_2, user2.id());
+        values1.put(MySQLiteHelper.COLUMN_RATING, 0);
+
+        ContentValues values2 = new ContentValues();
+        values2.put(MySQLiteHelper.COLUMN_FRIEND_1, user2.id());
+        values2.put(MySQLiteHelper.COLUMN_FRIEND_2, user1.id());
+        values2.put(MySQLiteHelper.COLUMN_RATING, 0);
+
+        // both will be executed or else none if error
+        database.beginTransaction();
+        try {
+            database.insert(MySQLiteHelper.TABLE_FRIENDS, null, values1);
+            database.insert(MySQLiteHelper.TABLE_FRIENDS, null, values2);
+            database.setTransactionSuccessful();
+            Log.d("SWF", user1 + " and " + user2 + "are now friends");
+        } catch (Exception e) {
+            Log.d("SWF", "adding friends failed");
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+        }
     }
 }

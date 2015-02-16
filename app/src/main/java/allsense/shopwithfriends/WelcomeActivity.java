@@ -1,6 +1,9 @@
 package allsense.shopwithfriends;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +32,43 @@ public class WelcomeActivity extends ActionBarActivity {
     }
 
     public void deleteUsers(View view) {
-        User.deleteAllUsers();
-        logAllUsers();
+        new AlertDialog.Builder(this)
+            .setTitle("Delete Users?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            User.deleteAllUsers();
+                            logAllUsers();
+                        }
+                    }).start();
+                }
+            })
+            .setNegativeButton("No", null)
+            .show();
+    }
+
+    public void resetDatabase(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle("Reset Database?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                UserDataSource dataSource = new UserDataSource(getApplicationContext());
+                                dataSource.open();
+                                dataSource.resetDatabase();
+                                dataSource.close();
+                            }
+                        }).start();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void logAllUsers() {
@@ -42,6 +80,17 @@ public class WelcomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         logAllUsers();
+        if (SWFApplication.AUTO_LOGIN) {
+            UserDataSource dataSource = new UserDataSource(getApplicationContext());
+            dataSource.open();
+            User user = dataSource.userForID(1);
+            dataSource.close();
+            if (user != null) {
+                logIn(null);
+            } else {
+                register(null);
+            }
+        }
     }
 
     @Override

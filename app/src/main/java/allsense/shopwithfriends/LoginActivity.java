@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -78,17 +79,25 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_scroll_view);
         mProgressView = findViewById(R.id.login_progress);
+
+        if (SWFApplication.AUTO_LOGIN) {
+            SWFApplication.AUTO_LOGIN = false;
+            UserDataSource dataSource = new UserDataSource(getApplicationContext());
+            dataSource.open();
+            User user = dataSource.userForID(1);
+            dataSource.close();
+            if (user != null) {
+                mUsernameView.setText(user.username());
+                mPasswordView.setText(user.password());
+                attemptLogin();
+            }
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
-
-    private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -101,38 +110,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             return;
         }
 
-        // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        View errorFocusView = null;
-
-        User user = User.userForUsername(username);
-
-        if (user != null) {
-            if (user.password().equals(password)) {
-                errorFocusView = mPasswordView;
-                mPasswordView.setError(getString(R.string.login_error_incorrect_password));
-            }
-        } else {
-            mUsernameView.setError(getString(R.string.login_error_invalid_username));
-            errorFocusView = mUsernameView;
-        }
-
-        if (errorFocusView != null) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            errorFocusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-//            showProgress(true);
-//            mAuthTask = new UserLoginTask(username, password);
-//            mAuthTask.execute();
-            User.currentUser = user;
-            Intent intent = new Intent(this, MainMenuActivity.class);
-            startActivity(intent);
-        }
+        UserLoginTask task = new UserLoginTask();
+        task.execute();
     }
 
     /**
@@ -171,6 +150,10 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         }
     }
 
+    private void populateAutoComplete() {
+        getLoaderManager().initLoader(0, null, this);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -201,9 +184,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {}
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -229,59 +210,55 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
+    public class UserLoginTask extends AsyncTask<Void, Void, User> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
+        protected User doInBackground(Void... params) {
             try {
                 // Simulate network access.
                 Thread.sleep(1000);
+                return User.userForUsername(mUsernameView.getText().toString());
             } catch (InterruptedException e) {
-                return false;
+                return null;
             }
-
-            for (User user : User.allUsers()) {
-                if (user.username().equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    boolean matches = user.password().equals(mPassword);
-                    if (matches) {
-                        User.currentUser = user;
-                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                        startActivity(intent);
-                    }
-                    return matches;
-                }
-            }
-            return true;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+        protected void onPostExecute(final User user) {
+            String password = mPasswordView.getText().toString();
 
-            if (success) {
-                finish();
+            View errorFocusView = null;
+
+            if (user != null) {
+                if (!user.password().equals(password)) {
+                    errorFocusView = mPasswordView;
+                    mPasswordView.setError(getString(R.string.login_error_incorrect_password));
+                }
             } else {
-                mPasswordView.setError(getString(R.string.login_error_incorrect_password));
-                mPasswordView.requestFocus();
+                mUsernameView.setError(getString(R.string.login_error_invalid_username));
+                errorFocusView = mUsernameView;
             }
+
+            if (errorFocusView != null) {
+                // There was an error; don't attempt login and focus the first
+                // form field with an error.
+                errorFocusView.requestFocus();
+            } else {
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
+                User.currentUser = user;
+                Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+            }
+
+            showProgress(false);
+            mAuthTask = null;
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
             showProgress(false);
+            mAuthTask = null;
         }
     }
 }
