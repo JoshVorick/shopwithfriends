@@ -3,11 +3,9 @@ package allsense.shopwithfriends;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private static final String fileName = "USERS";
     private static Context appContext;
     private static UserDataSource dataSource;
 
@@ -60,22 +58,12 @@ public class User {
     }
 
     public static User userForUsername(final String username) {
-        for (User user : allUsers()) {
-            if (user.username().equals(username)) {
-                return user;
-            }
-        }
-        return null;
+        return dataSource.userForUsername(username);
     }
 
-//    public static boolean usernamePasswordMatch(final String username, final String password) {
-//        for (User user : allUsers()) {
-//            if (user.username().equals(username)) {
-//                return user.password().equals(password);
-//            }
-//        }
-//        return false;
-//    }
+    public static User userForID(final long id) {
+        return dataSource.userForID(id);
+    }
 
     public static boolean isValidEmail(final String email) {
         return email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]+\\.[A-Za-z0-9]+");
@@ -93,11 +81,11 @@ public class User {
         return password.length() >= 4;
     }
 
-    private String name;
-    private String email;
-    private String username;
-    private String password;
-    private long id;
+    private final String name;
+    private final String email;
+    private final String username;
+    private final String password;
+    private final long id;
 
     public User(final String name, final String email, final String username, final String password, final long id) {
         if (name == null) {
@@ -139,6 +127,27 @@ public class User {
         return id;
     }
 
+    /**
+     *
+     * @return the average rating of this user
+     */
+    public int rating() {
+        return dataSource.rating(this);
+    }
+
+    /**
+     *
+     * @param friend
+     * @return what this user rated the friend
+     */
+    public int ratingForFriend(final User friend) {
+        return dataSource.rating(this, friend);
+    }
+
+    public void rate(final User friend, final int rating) {
+        dataSource.rate(this, friend, rating);
+    }
+
     public void addFriend(final User friend) {
         dataSource.addFriends(this, friend);
     }
@@ -155,6 +164,6 @@ public class User {
     @Override
     public String toString() {
 //        return username + ": " + name;
-        return name + ", " + email + ", " + username + ", " + password + ", " + id;
+        return "(" + name + ", " + email + ", " + username + ", " + password + ", " + id + ")";
     }
 }

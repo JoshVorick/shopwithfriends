@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +29,7 @@ public class FriendsActivity extends ActionBarActivity {
         adapterList = User.currentFriends();
         Log.d("SWF", "current user friends: " + adapterList);
 
-        adapter = new ArrayAdapter<User>(this, R.layout.activity_friends_cell, adapterList);
+        adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);
 
         listView = (ListView) findViewById(R.id.friends_list_view);
         listView.setAdapter(adapter);
@@ -38,8 +37,15 @@ public class FriendsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("SWF", "selected friend " + adapterList.get(position));
+                displayFriend(adapterList.get(position));
             }
         });
+    }
+
+    public void displayFriend(final User user) {
+        Intent intent = new Intent(this, DisplayFriendActivity.class);
+        intent.putExtra("id", user.id());
+        startActivity(intent);
     }
 
     @Override
@@ -55,8 +61,7 @@ public class FriendsActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_friends, menu);
+        getMenuInflater().inflate(R.menu.menu_friends, menu);
         return true;
     }
 

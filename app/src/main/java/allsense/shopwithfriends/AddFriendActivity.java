@@ -1,10 +1,9 @@
 package allsense.shopwithfriends;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +27,7 @@ public class AddFriendActivity extends ActionBarActivity {
         adapterList = User.currentNotFriends();
         Log.d("SWF", "users current user can add as friend: " + adapterList);
 
-        adapter = new ArrayAdapter<User>(this, R.layout.activity_friends_cell, adapterList);
+        adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);
 
         listView = (ListView) findViewById(R.id.add_friends_list_view);
         listView.setAdapter(adapter);

@@ -16,13 +16,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PASSWORD = "password";
 
     public static final String TABLE_FRIENDS = "friends";
-    public static final String COLUMN_FRIEND_1 = "id1";
-    public static final String COLUMN_FRIEND_2 = "id2";
+    public static final String COLUMN_FRIEND_1 = "id1"; // the rater
+    public static final String COLUMN_FRIEND_2 = "id2"; // the rated
+    public static final String COLUMN_RATING = "rating";
 
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Database creation sql statement
+    // statements to create the tables
     private static final String DATABASE_CREATE_USERS =
             "create table " +
                     TABLE_USERS +
@@ -39,7 +40,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     TABLE_FRIENDS +
                     "(" +
                     COLUMN_FRIEND_1 + " integer, " +
-                    COLUMN_FRIEND_2 + " integer" +
+                    COLUMN_FRIEND_2 + " integer, " +
+                    COLUMN_RATING + " integer" +
                     ");"
             ;
 
@@ -58,12 +60,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.w(MySQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        deleteAll(db);
+        deleteDatabase(db);
+        onCreate(db);
     }
 
-    public void deleteAll(SQLiteDatabase db) {
+    /**
+     * deletes all rows in all tables, but not the tables themselves
+     * @param db  the database
+     */
+    public void deleteAllData(SQLiteDatabase db) {
+        db.delete(TABLE_USERS, null, null);
+        db.delete(TABLE_FRIENDS, null, null);
+    }
+
+    /**
+     * deletes all tables in the database
+     * @param db  the database
+     */
+    public void deleteDatabase(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FRIENDS);
-        onCreate(db);
     }
 }
