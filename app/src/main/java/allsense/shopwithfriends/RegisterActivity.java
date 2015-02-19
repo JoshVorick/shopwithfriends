@@ -103,6 +103,12 @@ public class RegisterActivity extends ActionBarActivity {
                     mPasswordView.setText("");
                     mRegisterTask = null;
 
+                    String name = mNameView.getText().toString();
+                    String email = mEmailView.getText().toString();
+                    String username = mUsernameView.getText().toString();
+                    String password = mPasswordView.getText().toString();
+                    User.setCurrentUser(User.addUser(name, email, username, password));
+
                     Intent intent = new Intent(RegisterActivity.this, MainMenuActivity.class);
                     startActivity(intent);
                 } else {

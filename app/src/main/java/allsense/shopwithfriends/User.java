@@ -9,7 +9,16 @@ public class User {
     private static Context appContext;
     private static UserDataSource dataSource;
 
-    public static User currentUser;
+    public static User currentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(final User user) {
+        currentUser = user;
+        Log.d("SWF", "setting current user to " + user);
+    }
+
+    private static User currentUser;
 
     public static void init(final Context context) {
         if (appContext == null) {
@@ -41,11 +50,11 @@ public class User {
     }
 
     public static List<User> currentFriends() {
-        return dataSource.friends(currentUser);
+        return dataSource.friends(currentUser());
     }
 
     public static List<User> currentNotFriends() {
-        return dataSource.notFriends(currentUser);
+        return dataSource.notFriends(currentUser());
     }
 
     public static boolean usernameExists(final String username) {
