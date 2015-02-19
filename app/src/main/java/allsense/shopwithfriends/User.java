@@ -10,6 +10,9 @@ public class User {
     private static UserDataSource dataSource;
 
     public static User currentUser() {
+        if (currentUser == null) {
+            Log.e("SWF", "currentUser is null");
+        }
         return currentUser;
     }
 
