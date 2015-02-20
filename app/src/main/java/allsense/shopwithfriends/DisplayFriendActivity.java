@@ -27,7 +27,7 @@ public class DisplayFriendActivity extends ActionBarActivity {
         buttons[3] = (Button) findViewById(R.id.display_friend_button_4);
         buttons[4] = (Button) findViewById(R.id.display_friend_button_5);
 
-        rating = User.currentUser.ratingForFriend(friend);
+        rating = User.currentUser().ratingForFriend(friend);
 
         setTitle(friend.username());
 
@@ -85,13 +85,14 @@ public class DisplayFriendActivity extends ActionBarActivity {
      * writes new rating into database
      */
     public void rateFriend() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                User.currentUser.rate(friend, rating);
-                setRatingUI();
-            }
-        }).start();
+        User.currentUser().rate(friend, rating);
+        setRatingUI();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
     }
 
     @Override

@@ -35,7 +35,7 @@ public class AddFriendActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 User friend = adapterList.remove(position);
-                User.currentUser.addFriend(friend);
+                User.currentUser().addFriend(friend);
                 Log.d("SWF", "added friend " + friend);
                 Log.d("SWF", "refresh add friends list");
                 refreshList();
