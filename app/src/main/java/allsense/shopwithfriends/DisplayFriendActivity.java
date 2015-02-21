@@ -14,6 +14,7 @@ public class DisplayFriendActivity extends ActionBarActivity {
     private User friend;
     private int rating;
     private Button[] buttons;
+    private RateFriendTask rateTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +97,10 @@ public class DisplayFriendActivity extends ActionBarActivity {
      * writes new rating into database
      */
     public void rateFriend() {
-        RateFriendTask task = new RateFriendTask();
-        task.execute();
+        if (rateTask == null) {
+            rateTask = new RateFriendTask();
+            rateTask.execute();
+        }
     }
 
     private class RateFriendTask extends AsyncTask<Void, Void, Void> {
@@ -110,6 +113,7 @@ public class DisplayFriendActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             setRatingUI();
+            rateTask = null;
         }
     }
 
