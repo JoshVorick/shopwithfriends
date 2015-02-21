@@ -1,5 +1,6 @@
 package allsense.shopwithfriends;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -57,42 +58,59 @@ public class DisplayFriendActivity extends ActionBarActivity {
     }
 
     public void rate1(View view) {
-        rating = 1;
-        rateFriend();
+        if (rating != 1) {
+            rating = 1;
+            rateFriend();
+        }
     }
 
     public void rate2(View view) {
-        rating = 2;
-        rateFriend();
+        if (rating != 2) {
+            rating = 2;
+            rateFriend();
+        }
     }
 
     public void rate3(View view) {
-        rating = 3;
-        rateFriend();
+        if (rating != 3) {
+            rating = 3;
+            rateFriend();
+        }
     }
 
     public void rate4(View view) {
-        rating = 4;
-        rateFriend();
+        if (rating != 4) {
+            rating = 4;
+            rateFriend();
+        }
     }
 
     public void rate5(View view) {
-        rating = 5;
-        rateFriend();
+        if (rating != 5) {
+            rating = 5;
+            rateFriend();
+        }
     }
 
     /**
      * writes new rating into database
      */
     public void rateFriend() {
-        User.currentUser().rate(friend, rating);
-        setRatingUI();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }).start();
+        RateFriendTask task = new RateFriendTask();
+        task.execute();
+    }
+
+    private class RateFriendTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            User.currentUser().rate(friend, rating);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setRatingUI();
+        }
     }
 
     @Override
