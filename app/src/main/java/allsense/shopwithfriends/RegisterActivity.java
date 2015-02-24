@@ -97,16 +97,17 @@ public class RegisterActivity extends ActionBarActivity {
         protected void onPostExecute(Boolean success) {
             if (success) {
                 if (errorFocusView == null) {
+                    String name = mNameView.getText().toString();
+                    String email = mEmailView.getText().toString();
+                    String username = mUsernameView.getText().toString();
+                    String password = mPasswordView.getText().toString();
+
                     mNameView.setText("");
                     mEmailView.setText("");
                     mUsernameView.setText("");
                     mPasswordView.setText("");
                     mRegisterTask = null;
 
-                    String name = mNameView.getText().toString();
-                    String email = mEmailView.getText().toString();
-                    String username = mUsernameView.getText().toString();
-                    String password = mPasswordView.getText().toString();
                     User.setCurrentUser(User.addUser(name, email, username, password));
 
                     Intent intent = new Intent(RegisterActivity.this, MainMenuActivity.class);

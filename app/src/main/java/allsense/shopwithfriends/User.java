@@ -164,6 +164,8 @@ public class User {
         dataSource.addFriends(this, friend);
     }
 
+    public void deleteFriend(final User friend) { dataSource.deleteFriends(this, friend); }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof User) {
