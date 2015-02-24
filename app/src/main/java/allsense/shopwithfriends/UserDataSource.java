@@ -334,4 +334,39 @@ public class UserDataSource {
             database.endTransaction();
         }
     }
+
+    /**
+     * removes a user from friends
+     * @param user1
+     * @param user2
+     */
+    public void deleteFriends(final User user1, final User user2) {
+        Cursor cursor = queryFriends(MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id() +
+                " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id());
+
+        try {
+            if (cursor.isAfterLast()) {
+                Log.e("SWF", user1 + " and " + user2 + " have not been added to friends");
+                return;
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // both will be executed or else none if error
+        database.beginTransaction();
+        try {
+            database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id()
+                    + "AND" + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id(), null);
+            database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id()
+                    + "AND" + MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id(), null);
+            database.setTransactionSuccessful();
+            Log.d("SWF", user1 + " and " + user2 + "have been removed from friends");
+        } catch (Exception e) {
+            Log.d("SWF", "deleting friends failed");
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+        }
+    }
 }
