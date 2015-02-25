@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -29,6 +30,18 @@ public class RegisterActivity extends ActionBarActivity {
         mEmailView = (EditText) findViewById(R.id.emailEditText);
 
         SWFApplication.AUTO_LOGIN = false;
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d("SWF", "register activity onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("SWF", "register activity onResume");
+        super.onResume();
     }
 
     /**

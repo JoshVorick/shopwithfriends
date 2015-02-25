@@ -5,4 +5,7 @@
     <item
         android:title="@string/friends_menu_add_friend"
         android:id="@+id/friends_menu_add_friend"/>
+    <item
+        android:title="@string/friends_menu_remove_friends"
+        android:id="@+id/friends_menu_remove_friend"/>
 </menu>

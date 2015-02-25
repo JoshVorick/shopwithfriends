@@ -19,6 +19,7 @@ public class FriendsActivity extends ActionBarActivity {
     private ListView listView;
     private ArrayAdapter<User> adapter;
     private List<User> adapterList;
+    private boolean removing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,16 @@ public class FriendsActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("SWF", "selected friend " + adapterList.get(position));
-                displayFriend(adapterList.get(position));
+                if (removing) {
+                    User friend = adapterList.remove(position);
+                    User.currentUser().deleteFriend(friend);
+                    Log.d("SWF", "deleted friend " + friend);
+                    Log.d("SWF", "refresh friends list");
+                    refreshList();
+                } else {
+                    Log.d("SWF", "selected friend " + adapterList.get(position));
+                    displayFriend(adapterList.get(position));
+                }
             }
         });
     }
@@ -72,6 +81,13 @@ public class FriendsActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, AddFriendActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.friends_menu_remove_friend:
+                removing = !removing;
+                if (removing) {
+                    item.setTitle(R.string.friends_menu_display_friends);
+                } else {
+                    item.setTitle(R.string.friends_menu_remove_friends);
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
