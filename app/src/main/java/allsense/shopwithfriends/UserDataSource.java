@@ -356,10 +356,10 @@ public class UserDataSource {
         // both will be executed or else none if error
         database.beginTransaction();
         try {
-            database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id()
-                    + "AND" + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id(), null);
-            database.delete(MySQLiteHelper.TABLE_USERS, MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id()
-                    + "AND" + MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id(), null);
+            database.delete(MySQLiteHelper.TABLE_FRIENDS, MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user1.id()
+                    + " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user2.id(), null);
+            database.delete(MySQLiteHelper.TABLE_FRIENDS, MySQLiteHelper.COLUMN_FRIEND_1 + " = " + user2.id()
+                    + " AND " + MySQLiteHelper.COLUMN_FRIEND_2 + " = " + user1.id(), null);
             database.setTransactionSuccessful();
             Log.d("SWF", user1 + " and " + user2 + "have been removed from friends");
         } catch (Exception e) {
