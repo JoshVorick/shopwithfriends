@@ -21,6 +21,11 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/display_friend_text_size"/>
     <TextView
+        android:id="@+id/display_friend_number_sales_reports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/display_friend_text_size" />
+    <TextView
         android:id="@+id/display_friend_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

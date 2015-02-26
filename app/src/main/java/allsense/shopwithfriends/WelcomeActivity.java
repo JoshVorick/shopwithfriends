@@ -58,10 +58,14 @@ public class WelcomeActivity extends ActionBarActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                UserDataSource dataSource = new UserDataSource(getApplicationContext());
-                                dataSource.open();
-                                dataSource.resetDatabase();
-                                dataSource.close();
+                                UserDataSource userDataSource = new UserDataSource(getApplicationContext());
+                                userDataSource.open();
+                                userDataSource.resetDatabase();
+                                userDataSource.close();
+                                ItemDataSource itemDataSource = new ItemDataSource(getApplicationContext());
+                                itemDataSource.open();
+                                itemDataSource.resetDatabase();
+                                itemDataSource.close();
                             }
                         }).start();
                     }

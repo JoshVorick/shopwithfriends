@@ -24,8 +24,8 @@ public class RegisterActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mPasswordView = (EditText) findViewById(R.id.passwordEditText);
         mUsernameView = (EditText) findViewById(R.id.usernameEditText);
+        mPasswordView = (EditText) findViewById(R.id.passwordEditText);
         mNameView = (EditText) findViewById(R.id.nameEditText);
         mEmailView = (EditText) findViewById(R.id.emailEditText);
 

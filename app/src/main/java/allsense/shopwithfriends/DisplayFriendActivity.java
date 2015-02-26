@@ -37,6 +37,9 @@ public class DisplayFriendActivity extends ActionBarActivity {
         nameTextView.setText("Name: " + friend.name());
         TextView emailTextView = (TextView) findViewById(R.id.display_friend_email);
         emailTextView.setText("Email: " + friend.email());
+        TextView numberSalesReportsTextView = (TextView) findViewById(R.id.display_friend_number_sales_reports);
+        numberSalesReportsTextView.setText("Sales Reports to You: "
+                + User.currentUser().getNumberSalesReportsFromFriend(friend));
 
         setRatingUI();
     }

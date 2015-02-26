@@ -7,7 +7,9 @@ import java.util.List;
 
 public class User {
     private static Context appContext;
-    private static UserDataSource dataSource;
+    private static UserDataSource userDataSource;
+    private static ItemDataSource itemDataSource;
+    private static User currentUser;
 
     public static User currentUser() {
         if (currentUser == null) {
@@ -21,43 +23,65 @@ public class User {
         Log.d("SWF", "setting current user to " + user);
     }
 
-    private static User currentUser;
-
+    /**
+     * Called in SWFApplication
+     * @param context
+     */
     public static void init(final Context context) {
         if (appContext == null) {
             appContext = context;
-            dataSource = new UserDataSource(context);
-            dataSource.open();
+            userDataSource = new UserDataSource(context);
+            userDataSource.open();
+            itemDataSource = new ItemDataSource(context);
+            itemDataSource.open();
         }
     }
 
+    /**
+     * Called in SWFApplication
+     */
     public static void deinit() {
-        if (dataSource != null) {
-            dataSource.close();
+        if (userDataSource != null) {
+            userDataSource.close();
+        }
+        if (itemDataSource != null) {
+            itemDataSource.close();
         }
     }
 
     public static List<User> allUsers() {
-        return dataSource.allUsers();
+        return userDataSource.allUsers();
     }
 
     public static void deleteAllUsers() {
         Log.d("SWF", "delete all users");
-        dataSource.deleteAllUsers();
+        userDataSource.deleteAllUsers();
     }
 
     public static User addUser(final String name, final String email, final String username, final String password) {
-        User user = dataSource.createUser(name, email, username, password);
+        User user = userDataSource.createUser(name, email, username, password);
         Log.d("SWF", "add user " + user);
         return user;
     }
 
     public static List<User> currentFriends() {
-        return dataSource.friends(currentUser());
+        return userDataSource.friends(currentUser());
     }
 
     public static List<User> currentNotFriends() {
-        return dataSource.notFriends(currentUser());
+        return userDataSource.notFriends(currentUser());
+    }
+
+    public static List<Item> currentReportedTo() {
+        return itemDataSource.reportedTo(currentUser());
+    }
+
+    public static List<Item> currentRegistered() {
+        return itemDataSource.registered(currentUser());
+    }
+
+    public static List<Item> currentNotRegistered() {
+        return itemDataSource.notRegistered(currentUser());
     }
 
     public static boolean usernameExists(final String username) {
@@ -70,11 +94,11 @@ public class User {
     }
 
     public static User userForUsername(final String username) {
-        return dataSource.userForUsername(username);
+        return userDataSource.userForUsername(username);
     }
 
     public static User userForID(final long id) {
-        return dataSource.userForID(id);
+        return userDataSource.userForID(id);
     }
 
     public static boolean isValidEmail(final String email) {
@@ -119,6 +143,10 @@ public class User {
         this.id = id;
     }
 
+    public long id() {
+        return id;
+    }
+
     public String username() {
         return username;
     }
@@ -135,16 +163,12 @@ public class User {
         return email;
     }
 
-    public long id() {
-        return id;
-    }
-
     /**
      *
      * @return the average rating of this user
      */
     public int rating() {
-        return dataSource.rating(this);
+        return userDataSource.rating(this);
     }
 
     /**
@@ -153,18 +177,24 @@ public class User {
      * @return what this user rated the friend
      */
     public int ratingForFriend(final User friend) {
-        return dataSource.rating(this, friend);
+        return userDataSource.rating(this, friend);
     }
 
     public void rate(final User friend, final int rating) {
-        dataSource.rate(this, friend, rating);
+        userDataSource.rate(this, friend, rating);
     }
 
     public void addFriend(final User friend) {
-        dataSource.addFriends(this, friend);
+        userDataSource.addFriends(this, friend);
     }
 
-    public void deleteFriend(final User friend) { dataSource.deleteFriends(this, friend); }
+    public void deleteFriend(final User friend) {
+        userDataSource.deleteFriends(this, friend);
+    }
+
+    public int getNumberSalesReportsFromFriend(final User friend) {
+        return itemDataSource.reportedFromTo(friend, currentUser).size();
+    }
 
     @Override
     public boolean equals(Object o) {

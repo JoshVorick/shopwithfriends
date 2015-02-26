@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_report_sale">Report a Sale</string>
+
+    <string name="report_sale_name">Item name</string>
+    <string name="report_sale_seller">Seller</string>
+
+    <string name="report_sale_button">Report Sale</string>
+</resources>
