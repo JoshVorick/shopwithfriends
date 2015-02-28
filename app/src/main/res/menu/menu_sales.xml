@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="allsense.shopwithfriends.SalesActivity">
+    <item
+        android:title="@string/sales_menu_report_sale"
+        android:id="@+id/sales_menu_report_sale"/>
+    <item
+        android:title="@string/sales_menu_register_interest"
+        android:id="@+id/sales_menu_register_interest"/>
+    <item
+        android:title="@string/sales_menu_registered"
+        android:id="@+id/sales_menu_registered"/>
+</menu>

@@ -11,6 +11,7 @@ public class SWFApplication extends Application {
     @Override
     public void onCreate() {
         User.init(getApplicationContext());
+        Item.init(getApplicationContext());
         super.onCreate();
     }
 
@@ -18,5 +19,6 @@ public class SWFApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         User.deinit();
+        Item.deinit();
     }
 }

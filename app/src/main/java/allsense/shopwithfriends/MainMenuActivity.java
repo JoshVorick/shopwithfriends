@@ -24,4 +24,9 @@ public class MainMenuActivity extends ActionBarActivity {
         Intent intent = new Intent(this, FriendsActivity.class);
         startActivity(intent);
     }
+
+    public void toSales(View view) {
+        Intent intent = new Intent(this, SalesActivity.class);
+        startActivity(intent);
+    }
 }

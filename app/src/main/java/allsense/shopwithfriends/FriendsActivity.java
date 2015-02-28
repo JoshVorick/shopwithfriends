@@ -19,7 +19,7 @@ public class FriendsActivity extends ActionBarActivity {
     private ListView listView;
     private ArrayAdapter<User> adapter;
     private List<User> adapterList;
-    private boolean removing = false;
+    private boolean removing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +88,7 @@ public class FriendsActivity extends ActionBarActivity {
                 } else {
                     item.setTitle(R.string.friends_menu_remove_friends);
                 }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
