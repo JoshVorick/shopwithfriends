@@ -61,7 +61,6 @@ public class SalesActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_sales, menu);
         return true;
     }
@@ -71,22 +70,6 @@ public class SalesActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.sales_menu_report_sale:
                 startActivity(new Intent(this, ReportSaleActivity.class));
-                return true;
-            case R.id.sales_menu_register_interest:
-                startActivity(new Intent(this, RegisterInterestActivity.class));
-                return true;
-            case R.id.sales_menu_registered:
-                viewingRegistered = !viewingRegistered;
-                if (viewingRegistered) {
-                    adapterList = User.currentUser().reportedTo();
-                    Log.d("SWF", "Registered list: " + adapterList);
-                    item.setTitle(R.string.sales_menu_all);
-                } else {
-                    adapterList = Item.allSales();
-                    Log.d("SWF", "Full list: " + adapterList);
-                    item.setTitle(R.string.sales_menu_registered);
-                }
-                refreshList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

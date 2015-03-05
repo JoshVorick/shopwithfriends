@@ -16,7 +16,6 @@ import java.util.List;
 
 public class FriendsActivity extends ActionBarActivity {
 
-    private ListView listView;
     private ArrayAdapter<User> adapter;
     private List<User> adapterList;
     private boolean removing;
@@ -32,7 +31,7 @@ public class FriendsActivity extends ActionBarActivity {
 
         adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);
 
-        listView = (ListView) findViewById(R.id.friends_list_view);
+        ListView listView = (ListView) findViewById(R.id.friends_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

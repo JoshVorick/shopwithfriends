@@ -5,10 +5,4 @@
     <item
         android:title="@string/sales_menu_report_sale"
         android:id="@+id/sales_menu_report_sale"/>
-    <item
-        android:title="@string/sales_menu_register_interest"
-        android:id="@+id/sales_menu_register_interest"/>
-    <item
-        android:title="@string/sales_menu_registered"
-        android:id="@+id/sales_menu_registered"/>
 </menu>

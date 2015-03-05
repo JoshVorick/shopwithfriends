@@ -16,7 +16,6 @@ import java.util.List;
 
 public class InterestsActivity extends ActionBarActivity {
 
-    private ListView listView;
     private ArrayAdapter<Interest> adapter;
     private List<Interest> adapterList;
     private boolean removing;
@@ -24,14 +23,16 @@ public class InterestsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("SWF", "onCreate InterestsActivity");
         setContentView(R.layout.activity_interests);
+        Log.d("SWF", "setContentView");
 
         adapterList = User.currentUser().interests();
         Log.d("SWF", "current user interests: " + adapterList);
 
         adapter = new ArrayAdapter<Interest>(this, R.layout.list_view_cell, adapterList);
 
-        listView = (ListView) findViewById(R.id.interests_list_view);
+        ListView listView = (ListView) findViewById(R.id.interests_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,6 +65,7 @@ public class InterestsActivity extends ActionBarActivity {
     public void refreshList() {
         adapterList.clear();
         adapterList.addAll(User.currentUser().interests());
+        Log.d("SWF", "2 current user interests: " + adapterList);
         adapter.notifyDataSetChanged();
     }
 
