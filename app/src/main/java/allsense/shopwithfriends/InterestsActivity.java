@@ -16,7 +16,6 @@ import java.util.List;
 
 public class InterestsActivity extends ActionBarActivity {
 
-    private ListView listView;
     private ArrayAdapter<Interest> adapter;
     private List<Interest> adapterList;
     private boolean removing;
@@ -31,7 +30,7 @@ public class InterestsActivity extends ActionBarActivity {
 
         adapter = new ArrayAdapter<Interest>(this, R.layout.list_view_cell, adapterList);
 
-        listView = (ListView) findViewById(R.id.interests_list_view);
+        ListView listView = (ListView) findViewById(R.id.interests_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

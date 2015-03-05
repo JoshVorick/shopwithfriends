@@ -74,6 +74,7 @@ public class InterestDataSource {
         long id = interest.id();
         System.out.println("deleting interest " + interest);
         database.delete(SQLiteHelper.TABLE_INTERESTS, SQLiteHelper.INTERESTS_COLUMN_ID + " = " + id, null);
+        database.delete(SQLiteHelper.TABLE_REGISTERED, SQLiteHelper.REGISTERED_COLUMN_INTEREST_ID + " = " + id, null);
     }
 
     public List<Interest> allInterests() {
