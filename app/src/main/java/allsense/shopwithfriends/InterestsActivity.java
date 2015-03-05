@@ -23,9 +23,7 @@ public class InterestsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("SWF", "onCreate InterestsActivity");
         setContentView(R.layout.activity_interests);
-        Log.d("SWF", "setContentView");
 
         adapterList = User.currentUser().interests();
         Log.d("SWF", "current user interests: " + adapterList);
@@ -65,7 +63,6 @@ public class InterestsActivity extends ActionBarActivity {
     public void refreshList() {
         adapterList.clear();
         adapterList.addAll(User.currentUser().interests());
-        Log.d("SWF", "2 current user interests: " + adapterList);
         adapter.notifyDataSetChanged();
     }
 
