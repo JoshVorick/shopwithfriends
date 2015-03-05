@@ -1,11 +1,11 @@
 package allsense.shopwithfriends;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
 public class Item {
-    private static Context appContext;
     private static ItemDataSource itemDataSource;
 
     /**
@@ -13,11 +13,7 @@ public class Item {
      * @param context
      */
     public static void init(final Context context) {
-        if (appContext == null) {
-            appContext = context;
-            itemDataSource = new ItemDataSource(context);
-            itemDataSource.open();
-        }
+        itemDataSource = new ItemDataSource(context);
     }
 
     /**
@@ -33,16 +29,14 @@ public class Item {
         return itemDataSource.allItems();
     }
 
-    public static List<Item> registeredSales(User user) {
-        return itemDataSource.registered(user);
+    public static void reportSale(final String name, final String seller, final User friend1, final User friend2) {
+        Item item = addItem(name, seller);
+        itemDataSource.reportSale(item, friend1, friend2);
+        Log.d("SWF", friend1 + " reported sale to " + friend2 + ": " + item);
     }
 
-    public static Item reportSale(final String name, final String seller, final User friend1, final User friend2) {
-        return itemDataSource.reportSale(name, seller, friend1, friend2);
-    }
-
-    public static void registerItem(final Item item, final User user, final int maxPrice) {
-        itemDataSource.registerInterest(item, user, maxPrice);
+    public static Item addItem(final String name, final String seller) {
+        return itemDataSource.createItem(name, seller);
     }
 
     private final String name;

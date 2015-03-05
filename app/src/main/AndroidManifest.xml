@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="allsense.shopwithfriends" >
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <application
         android:name=".SWFApplication"
         android:allowBackup="true"
@@ -24,55 +19,72 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:label="@string/title_login"
             android:parentActivityName=".WelcomeActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_register"
+            android:label="@string/title_register"
             android:parentActivityName=".WelcomeActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".MainMenuActivity"
-            android:label="@string/title_activity_main_menu"
+            android:label="@string/title_main_menu"
             android:parentActivityName=".LoginActivity" >
         </activity>
         <activity
             android:name=".FriendsActivity"
-            android:label="@string/title_activity_friends"
+            android:label="@string/title_friends"
             android:parentActivityName=".MainMenuActivity" >
         </activity>
         <activity
             android:name=".AddFriendActivity"
-            android:label="@string/title_activity_add_friend"
+            android:label="@string/title_add_friend"
             android:parentActivityName=".FriendsActivity" >
         </activity>
         <activity
             android:name=".DisplayFriendActivity"
-            android:label="@string/title_activity_display_friend"
+            android:label="@string/title_display_friend"
             android:parentActivityName=".FriendsActivity" >
         </activity>
         <activity
+            android:name=".SalesActivity"
+            android:label="@string/title_sales"
+            android:parentActivityName=".MainMenuActivity" >
+        </activity>
+        <activity
             android:name=".ReportSaleActivity"
-            android:label="@string/title_activity_report_sale" >
+            android:label="@string/title_report_sale"
+            android:parentActivityName=".SalesActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".RegisterInterestActivity"
-            android:label="@string/title_activity_register_interest" >
-        </activity>
-        <activity
-            android:name=".SalesActivity"
-            android:label="@string/title_activity_sales" >
+            android:label="@string/title_register_interest"
+            android:parentActivityName=".SalesActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".DisplaySaleActivity"
-            android:label="@string/title_activity_display_sale" >
+            android:label="@string/title_display_sale"
+            android:parentActivityName=".SalesActivity" >
         </activity>
         <activity
             android:name=".ReportToFriendActivity"
-            android:label="@string/title_activity_report_to_friend" >
+            android:label="@string/title_report_to_friend"
+            android:parentActivityName=".SalesActivity" >
+        </activity>
+        <activity
+            android:name=".InterestsActivity"
+            android:label="@string/title_interests"
+            android:parentActivityName=".MainMenuActivity">
+        </activity>
+        <activity
+            android:name=".DisplayInterestActivity"
+            android:label="@string/title_display_interest"
+            android:parentActivityName=".InterestsActivity">
         </activity>
     </application>
 

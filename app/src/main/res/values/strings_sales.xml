@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_activity_sales">Sales</string>
+    <string name="title_sales">Sales</string>
+
     <string name="sales_menu_report_sale">Report a Sale</string>
     <string name="sales_menu_register_interest">Register Interest</string>
     <string name="sales_menu_registered">View Registered Items</string>

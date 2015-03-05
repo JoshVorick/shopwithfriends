@@ -24,7 +24,7 @@ public class AddFriendActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_add_friend);
 
-        adapterList = User.currentNotFriends();
+        adapterList = User.currentUser().notFriends();
         Log.d("SWF", "users current user can add as friend: " + adapterList);
 
         adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);

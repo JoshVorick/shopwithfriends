@@ -1,8 +1,8 @@
 package allsense.shopwithfriends;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +25,7 @@ public class ReportToFriendActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_to_friend);
 
-        adapterList = User.currentFriends();
+        adapterList = User.currentUser().friends();
         Log.d("SWF", "current user friends: " + adapterList);
 
         adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);

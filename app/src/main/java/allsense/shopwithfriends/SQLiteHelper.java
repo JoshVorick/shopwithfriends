@@ -7,7 +7,7 @@ import android.util.Log;
 
 // http://www.vogella.com/tutorials/AndroidSQLite/article.html
 
-public class MySQLiteHelper extends SQLiteOpenHelper {
+public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_USERS = "users";
     public static final String USERS_COLUMN_ID = "_id";
     public static final String USERS_COLUMN_NAME = "name";
@@ -27,17 +27,30 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_REPORTED = "reported";
     public static final String REPORTED_COLUMN_ITEM_ID = "item_id";
-    //from user 1 to user 2
+    // from user 1 to user 2
     public static final String REPORTED_COLUMN_FRIEND_ID_1 = "user_id1";
     public static final String REPORTED_COLUMN_FRIEND_ID_2 = "user_id2";
 
+    public static final String TABLE_INTERESTS = "interests";
+    public static final String INTERESTS_COLUMN_ID = "_id";
+    public static final String INTERESTS_COLUMN_NAME = "name";
+    public static final String INTERESTS_COLUMN_PRICE = "price";
+
     public static final String TABLE_REGISTERED = "registered";
-    public static final String REGISTERED_COLUMN_ITEM_ID = "item_id";
     public static final String REGISTERED_COLUMN_USER_ID = "user_id";
-    public static final String REGISTERED_COLUMN_MAX_PRICE = "max_price";
+    public static final String REGISTERED_COLUMN_INTEREST_ID = "interest_id";
 
     private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
+
+    private static final String[] ALL_TABLES = {
+            TABLE_INTERESTS,
+            TABLE_FRIENDS,
+            TABLE_ITEMS,
+            TABLE_REGISTERED,
+            TABLE_REPORTED,
+            TABLE_USERS
+    };
 
     // statements to create the tables
     private static final String DATABASE_CREATE_USERS =
@@ -84,28 +97,44 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "create table if not exists " +
                     TABLE_REGISTERED +
                     "(" +
-                    REGISTERED_COLUMN_ITEM_ID + " integer, " +
                     REGISTERED_COLUMN_USER_ID + " integer, " +
-                    REGISTERED_COLUMN_MAX_PRICE + " integer" +
+                    REGISTERED_COLUMN_INTEREST_ID + " integer" +
                     ");"
             ;
 
-    public MySQLiteHelper(Context context) {
+    private static final String DATABASE_CREATE_INTERESTS =
+            "create table if not exists " +
+                    TABLE_INTERESTS +
+                    "(" +
+                    INTERESTS_COLUMN_ID + " integer primary key autoincrement, " +
+                    INTERESTS_COLUMN_NAME + " text not null, " +
+                    INTERESTS_COLUMN_PRICE + " integer" +
+                    ")"
+            ;
+
+    public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(DATABASE_CREATE_USERS);
-        database.execSQL(DATABASE_CREATE_FRIENDS);
-        database.execSQL(DATABASE_CREATE_ITEMS);
-        database.execSQL(DATABASE_CREATE_REPORTED);
-        database.execSQL(DATABASE_CREATE_REGISTERED);
+        String[] creates = {
+                DATABASE_CREATE_USERS,
+                DATABASE_CREATE_FRIENDS,
+                DATABASE_CREATE_ITEMS,
+                DATABASE_CREATE_INTERESTS,
+                DATABASE_CREATE_REPORTED,
+                DATABASE_CREATE_REGISTERED,
+        };
+
+        for (String create : creates) {
+            database.execSQL(create);
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(MySQLiteHelper.class.getName(),
+        Log.w(SQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         deleteDatabase(db);
@@ -117,11 +146,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      * @param db  the database
      */
     public void deleteAllData(SQLiteDatabase db) {
-        db.delete(TABLE_USERS, null, null);
-        db.delete(TABLE_FRIENDS, null, null);
-        db.delete(TABLE_ITEMS, null, null);
-        db.delete(TABLE_REPORTED, null, null);
-        db.delete(TABLE_REGISTERED, null, null);
+        for (String table : ALL_TABLES) {
+            db.delete(table, null, null);
+        }
     }
 
     /**
@@ -129,10 +156,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      * @param db  the database
      */
     public void deleteDatabase(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FRIENDS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORTED);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTERED);
+        for (String table : ALL_TABLES) {
+            db.execSQL("DROP TABLE IF EXISTS " + table);
+        }
+    }
+
+    public static void resetDatabase(final Context context) {
+        SQLiteHelper helper = new SQLiteHelper(context);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        helper.deleteDatabase(database);
+        helper.onCreate(database);
     }
 }

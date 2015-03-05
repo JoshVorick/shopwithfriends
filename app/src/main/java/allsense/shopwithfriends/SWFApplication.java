@@ -12,6 +12,7 @@ public class SWFApplication extends Application {
     public void onCreate() {
         User.init(getApplicationContext());
         Item.init(getApplicationContext());
+        Interest.init(getApplicationContext());
         super.onCreate();
     }
 
@@ -20,5 +21,6 @@ public class SWFApplication extends Application {
         super.onTerminate();
         User.deinit();
         Item.deinit();
+        Interest.deinit();
     }
 }

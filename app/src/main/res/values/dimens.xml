@@ -1,11 +1,15 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
     <dimen name="welcome_button_width">150dp</dimen>
     <dimen name="welcome_button_text_size">20sp</dimen>
+
     <dimen name="main_menu_button_width">150dp</dimen>
     <dimen name="main_menu_button_text_size">20sp</dimen>
+
     <dimen name="display_friend_text_size">20sp</dimen>
     <dimen name="display_friend_rating_button_size">50dp</dimen>
+
+    <dimen name="display_interest_text_size">20sp</dimen>
 </resources>

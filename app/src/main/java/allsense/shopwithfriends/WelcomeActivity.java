@@ -30,25 +30,6 @@ public class WelcomeActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    public void deleteUsers(View view) {
-        new AlertDialog.Builder(this)
-            .setTitle("Delete Users?")
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            User.deleteAllUsers();
-                            logAllUsers();
-                        }
-                    }).start();
-                }
-            })
-            .setNegativeButton("No", null)
-            .show();
-    }
-
     public void resetDatabase(View view) {
         new AlertDialog.Builder(this)
                 .setTitle("Reset Database?")
@@ -58,14 +39,7 @@ public class WelcomeActivity extends ActionBarActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                UserDataSource userDataSource = new UserDataSource(getApplicationContext());
-                                userDataSource.open();
-                                userDataSource.resetDatabase();
-                                userDataSource.close();
-                                ItemDataSource itemDataSource = new ItemDataSource(getApplicationContext());
-                                itemDataSource.open();
-                                itemDataSource.resetDatabase();
-                                itemDataSource.close();
+                                SQLiteHelper.resetDatabase(getApplicationContext());
                             }
                         }).start();
                     }
@@ -85,7 +59,6 @@ public class WelcomeActivity extends ActionBarActivity {
         logAllUsers();
         if (SWFApplication.AUTO_LOGIN) {
             UserDataSource dataSource = new UserDataSource(getApplicationContext());
-            dataSource.open();
             User user = dataSource.userForID(1);
             dataSource.close();
             if (user != null) {
