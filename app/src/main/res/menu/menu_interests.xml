@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="allsense.shopwithfriends.InterestsActivity">
+    <item
+        android:title="@string/interests_menu_add_interest"
+        android:id="@+id/interests_menu_add_interest"/>
+    <item
+        android:title="@string/interests_menu_remove_interests"
+        android:id="@+id/interests_menu_remove_interests"/>
+</menu>

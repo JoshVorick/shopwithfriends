@@ -1,8 +1,8 @@
 package allsense.shopwithfriends;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,9 +68,6 @@ public class SalesActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.sales_menu_report_sale:
                 startActivity(new Intent(this, ReportSaleActivity.class));
@@ -81,12 +78,12 @@ public class SalesActivity extends ActionBarActivity {
             case R.id.sales_menu_registered:
                 viewingRegistered = !viewingRegistered;
                 if (viewingRegistered) {
-                    adapterList = Item.registeredSales(User.currentUser());
-                    System.out.println("Registered list: " + adapterList);
+                    adapterList = User.currentUser().reportedTo();
+                    Log.d("SWF", "Registered list: " + adapterList);
                     item.setTitle(R.string.sales_menu_all);
                 } else {
                     adapterList = Item.allSales();
-                    System.out.println("Full list: " + adapterList);
+                    Log.d("SWF", "Full list: " + adapterList);
                     item.setTitle(R.string.sales_menu_registered);
                 }
                 refreshList();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_friends">Friends</string>
+    <string name="title_friends">Friends</string>
     <string name="friends_menu_add_friend">Add Friend</string>
     <string name="friends_menu_remove_friends">Remove Friends</string>
     <string name="friends_menu_display_friends">Display Friends</string>

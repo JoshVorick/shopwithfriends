@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_register">Register</string>
+    <string name="title_register">Register</string>
 
     <string name="register_username">Username</string>
     <string name="register_name">Name</string>

@@ -6,9 +6,9 @@ import android.util.Log;
 import java.util.List;
 
 public class User {
-    private static Context appContext;
     private static UserDataSource userDataSource;
     private static ItemDataSource itemDataSource;
+    private static InterestDataSource interestDataSource;
     private static User currentUser;
 
     public static User currentUser() {
@@ -28,13 +28,9 @@ public class User {
      * @param context
      */
     public static void init(final Context context) {
-        if (appContext == null) {
-            appContext = context;
-            userDataSource = new UserDataSource(context);
-            userDataSource.open();
-            itemDataSource = new ItemDataSource(context);
-            itemDataSource.open();
-        }
+        userDataSource = new UserDataSource(context);
+        itemDataSource = new ItemDataSource(context);
+        interestDataSource = new InterestDataSource(context);
     }
 
     /**
@@ -62,26 +58,6 @@ public class User {
         User user = userDataSource.createUser(name, email, username, password);
         Log.d("SWF", "add user " + user);
         return user;
-    }
-
-    public static List<User> currentFriends() {
-        return userDataSource.friends(currentUser());
-    }
-
-    public static List<User> currentNotFriends() {
-        return userDataSource.notFriends(currentUser());
-    }
-
-    public static List<Item> currentReportedTo() {
-        return itemDataSource.reportedTo(currentUser());
-    }
-
-    public static List<Item> currentRegistered() {
-        return itemDataSource.registered(currentUser());
-    }
-
-    public static List<Item> currentNotRegistered() {
-        return itemDataSource.notRegistered(currentUser());
     }
 
     public static boolean usernameExists(final String username) {
@@ -171,11 +147,6 @@ public class User {
         return userDataSource.rating(this);
     }
 
-    /**
-     *
-     * @param friend
-     * @return what this user rated the friend
-     */
     public int ratingForFriend(final User friend) {
         return userDataSource.rating(this, friend);
     }
@@ -194,6 +165,30 @@ public class User {
 
     public int getNumberSalesReportsFromFriend(final User friend) {
         return itemDataSource.reportedFromTo(friend, currentUser).size();
+    }
+
+    public List<User> friends() {
+        return userDataSource.friends(this);
+    }
+
+    public List<User> notFriends() {
+        return userDataSource.notFriends(this);
+    }
+
+    public List<Item> reportedTo() {
+        return itemDataSource.reportedTo(this);
+    }
+
+    public List<Item> reportedBy() {
+        return itemDataSource.reportedBy(this);
+    }
+
+    public List<Interest> interests() {
+        return interestDataSource.registered(this);
+    }
+
+    public List<Interest> notInterests() {
+        return interestDataSource.notRegistered(this);
     }
 
     @Override

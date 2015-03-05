@@ -1,78 +1,73 @@
 package allsense.shopwithfriends;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.List;
+import android.widget.EditText;
 
 
 public class RegisterInterestActivity extends ActionBarActivity {
 
-    private ListView listView;
-    private ArrayAdapter<Item> adapter;
-    private List<Item> adapterList;
+    private EditText mNameTextView;
+    private EditText mPriceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register_interest);
-        adapterList = User.currentNotRegistered();
-        Log.d("SWF", "current unregistered items: " + adapterList);
 
-        adapter = new ArrayAdapter<Item>(this, R.layout.list_view_cell, adapterList);
+        mNameTextView = (EditText) findViewById(R.id.register_interest_item_name_edit_text);
+        mPriceTextView = (EditText) findViewById(R.id.register_interest_price_edit_text);
 
-        listView = (ListView) findViewById(R.id.register_list_view);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Item registered = adapterList.remove(position);
-                Item.registerItem(registered, User.currentUser(), 1000);
-                Log.d("SWF", "register interest in " + registered);
-                Log.d("SWF", "refresh unregistered items list");
-                refreshList();
+        Log.d("SWF", "register interest");
+    }
+
+    public void registerItem(View view) {
+        View errorView = null;
+        CharSequence nameError = null;
+        CharSequence priceError = null;
+
+        String priceText = mPriceTextView.getText().toString();
+        int price = 0;
+
+        try {
+            price = Integer.parseInt(priceText);
+        } catch (NumberFormatException e) {
+            errorView = mPriceTextView;
+            priceError = getString(R.string.register_interest_invalid_price);
+        }
+
+        String name = mNameTextView.getText().toString();
+        if (name.isEmpty()) {
+            errorView = mNameTextView;
+            nameError = getString(R.string.register_interest_invalid_price);
+        }
+
+        if (errorView != null) {
+            errorView.requestFocus();
+            if (priceError != null) {
+                mPriceTextView.setError(priceError);
             }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("SWF", "refresh not registered items list");
-        refreshList();
-    }
-
-    public void refreshList() {
-        adapter.notifyDataSetChanged();
+            if (nameError != null) {
+                mNameTextView.setError(nameError);
+            }
+        } else {
+            Interest.registerInterest(User.currentUser(), name, price);
+            finish();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register_interest, menu);
-        return true;
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }

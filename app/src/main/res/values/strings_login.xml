@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_login">Log in</string>
+    <string name="title_login">Log in</string>
 
     <string name="login_prompt_username">Username</string>
     <string name="login_prompt_password">Password</string>
