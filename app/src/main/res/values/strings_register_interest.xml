@@ -3,6 +3,7 @@
 
     <string name="register_interest_item_name">Item Name</string>
     <string name="register_interest_price">Price</string>
+    <string name="register_interest_button">Register Interest</string>
     <string name="register_interest_invalid_item_name">Invalid Item Name</string>
     <string name="register_interest_invalid_price">Invalid Price</string>
 </resources>
