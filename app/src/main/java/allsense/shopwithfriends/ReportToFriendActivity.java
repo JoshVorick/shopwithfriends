@@ -41,7 +41,8 @@ public class ReportToFriendActivity extends ActionBarActivity {
                     User friend = adapterList.get(position);
                     String itemName = extras.getString("itemName");
                     String seller = extras.getString("seller");
-                    Item.reportSale(itemName, seller, User.currentUser(), friend);
+                    String price = extras.getString("price");
+                    Item.reportSale(itemName, seller, price, User.currentUser(), friend);
                 }
                 Intent intent = new Intent(ReportToFriendActivity.this, SalesActivity.class);
                 startActivity(intent);

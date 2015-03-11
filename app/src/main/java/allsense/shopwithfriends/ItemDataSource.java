@@ -16,6 +16,7 @@ public class ItemDataSource {
             SQLiteHelper.ITEMS_COLUMN_ID,
             SQLiteHelper.ITEMS_COLUMN_NAME,
             SQLiteHelper.ITEMS_COLUMN_SELLER,
+            SQLiteHelper.ITEMS_COLUMN_PRICE,
     };
 
     private static final String[] ALL_COLUMNS_REPORTED = {
@@ -58,7 +59,8 @@ public class ItemDataSource {
         long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String seller = cursor.getString(2);
-        return new Item(name, seller, id);
+        String price = cursor.getString(3);
+        return new Item(name, seller, price, id);
     }
 
     /**
@@ -66,10 +68,11 @@ public class ItemDataSource {
      * @param name
      * @return the created item
      */
-    public Item createItem(final String name, final String seller) {
+    public Item createItem(final String name, final String seller, final String price) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.ITEMS_COLUMN_NAME, name);
         values.put(SQLiteHelper.ITEMS_COLUMN_SELLER, seller);
+        values.put(SQLiteHelper.ITEMS_COLUMN_PRICE, price);
         long insertID = database.insert(SQLiteHelper.TABLE_ITEMS, null, values);
         Cursor cursor = queryItems(SQLiteHelper.ITEMS_COLUMN_ID + " = " + insertID);
         cursor.moveToFirst();

@@ -14,6 +14,7 @@ public class ReportSaleActivity extends ActionBarActivity {
 
     private EditText mItemNameView;
     private EditText mSellerView;
+    private EditText mPriceView;
     private ItemReportTask mReportTask;
 
     @Override
@@ -23,6 +24,7 @@ public class ReportSaleActivity extends ActionBarActivity {
 
         mItemNameView = (EditText) findViewById(R.id.itemNameEditText);
         mSellerView = (EditText) findViewById(R.id.sellerEditText);
+        mPriceView = (EditText) findViewById(R.id.priceEditText);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class ReportSaleActivity extends ActionBarActivity {
         protected Boolean doInBackground(Void... params) {
             try {
                 // Simulate network access.
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -70,6 +72,7 @@ public class ReportSaleActivity extends ActionBarActivity {
                 if (errorFocusView == null) {
                     String itemName = mItemNameView.getText().toString();
                     String seller = mSellerView.getText().toString();
+                    String price = mPriceView.getText().toString();
 
                     mItemNameView.setText("");
                     mSellerView.setText("");
@@ -78,6 +81,7 @@ public class ReportSaleActivity extends ActionBarActivity {
                     Intent intent = new Intent(ReportSaleActivity.this, ReportToFriendActivity.class);
                     intent.putExtra("itemName", itemName);
                     intent.putExtra("seller", seller);
+                    intent.putExtra("price", price);
                     startActivity(intent);
                 } else {
                     errorFocusView.requestFocus();

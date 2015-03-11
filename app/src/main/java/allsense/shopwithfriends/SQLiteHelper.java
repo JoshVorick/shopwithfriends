@@ -24,6 +24,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String ITEMS_COLUMN_ID = "_id";
     public static final String ITEMS_COLUMN_NAME = "name";
     public static final String ITEMS_COLUMN_SELLER = "seller";
+    public static final String ITEMS_COLUMN_PRICE = "price";
 
     public static final String TABLE_REPORTED = "reported";
     public static final String REPORTED_COLUMN_ITEM_ID = "item_id";
@@ -79,7 +80,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "(" +
                     ITEMS_COLUMN_ID + " integer primary key autoincrement, " +
                     ITEMS_COLUMN_NAME + " text not null, " +
-                    ITEMS_COLUMN_SELLER + " text not null" +
+                    ITEMS_COLUMN_SELLER + " text not null, " +
+                    ITEMS_COLUMN_PRICE + " integer" +
                     ");"
             ;
 

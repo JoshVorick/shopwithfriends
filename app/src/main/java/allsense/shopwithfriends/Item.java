@@ -29,29 +29,34 @@ public class Item {
         return itemDataSource.allItems();
     }
 
-    public static void reportSale(final String name, final String seller, final User friend1, final User friend2) {
-        Item item = addItem(name, seller);
+    public static void reportSale(final String name, final String seller, final String price, final User friend1, final User friend2) {
+        Item item = addItem(name, seller, price);
         itemDataSource.reportSale(item, friend1, friend2);
         Log.d("SWF", friend1 + " reported sale to " + friend2 + ": " + item);
     }
 
-    public static Item addItem(final String name, final String seller) {
-        return itemDataSource.createItem(name, seller);
+    public static Item addItem(final String name, final String seller, final String price) {
+        return itemDataSource.createItem(name, seller, price);
     }
 
     private final String name;
     private final String seller;
+    private final String price;
     private final long id;
 
-    public Item(final String name, final String seller, final long id) {
+    public Item(final String name, final String seller, final String price,final long id) {
         if (name == null) {
             throw new IllegalArgumentException("item name is null");
         }
         if (seller == null) {
             throw new IllegalArgumentException("seller name is null");
         }
+        if (price == null) {
+            throw new IllegalArgumentException("item price is null");
+        }
         this.name = name;
         this.seller = seller;
+        this.price = price;
         this.id = id;
     }
 
@@ -67,6 +72,10 @@ public class Item {
         return seller;
     }
 
+    public String price() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Item) {
@@ -78,6 +87,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "(" + name + ", " + seller + ", " + id + ")";
+        return "(" + name + ", " + seller + ", " + price + ", " + id + ")";
     }
 }
