@@ -58,7 +58,7 @@ public class ItemDataSource {
         long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String seller = cursor.getString(2);
-        String price = cursor.getString(3);
+        int price = Integer.parseInt(cursor.getString(3));
         return new Item(name, seller, price, id);
     }
 
@@ -67,7 +67,7 @@ public class ItemDataSource {
      * @param name
      * @return the created item
      */
-    public Item createItem(final String name, final String seller, final String price) {
+    public Item createItem(final String name, final String seller, final int price) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.ITEMS_COLUMN_NAME, name);
         values.put(SQLiteHelper.ITEMS_COLUMN_SELLER, seller);

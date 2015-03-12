@@ -29,30 +29,27 @@ public class Item {
         return itemDataSource.allItems();
     }
 
-    public static void reportSale(final String name, final String seller, final String price, final User friend) {
+    public static void reportSale(final String name, final String seller, final int price, final User friend) {
         Item item = addItem(name, seller, price);
         itemDataSource.reportSale(item, friend);
         Log.d("SWF", friend + " reported sale of: " + item);
     }
 
-    public static Item addItem(final String name, final String seller, final String price) {
+    public static Item addItem(final String name, final String seller, final int price) {
         return itemDataSource.createItem(name, seller, price);
     }
 
     private final String name;
     private final String seller;
-    private final String price;
+    private final int price;
     private final long id;
 
-    public Item(final String name, final String seller, final String price,final long id) {
+    public Item(final String name, final String seller, final int price, final long id) {
         if (name == null) {
             throw new IllegalArgumentException("item name is null");
         }
         if (seller == null) {
             throw new IllegalArgumentException("seller name is null");
-        }
-        if (price == null) {
-            throw new IllegalArgumentException("item price is null");
         }
         this.name = name;
         this.seller = seller;
@@ -72,7 +69,7 @@ public class Item {
         return seller;
     }
 
-    public String price() {
+    public int price() {
         return price;
     }
 

@@ -56,7 +56,7 @@ public class ReportSaleActivity extends ActionBarActivity {
      * Represents an asynchronous report item task.
      */
     public class ItemReportTask extends AsyncTask<Void, Void, Boolean> {
-        View errorFocusView;
+        View errorView;
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -72,21 +72,49 @@ public class ReportSaleActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                if (errorFocusView == null) {
-                    String itemName = mItemNameView.getText().toString();
-                    String seller = mSellerView.getText().toString();
-                    String price = mPriceView.getText().toString();
+                CharSequence nameError = null;
+                CharSequence sellerError = null;
+                CharSequence priceError = null;
+
+                String itemName = mItemNameView.getText().toString();
+                String seller = mSellerView.getText().toString();
+                String priceText = mPriceView.getText().toString();
+                int price = 0;
+
+                try {
+                    price = Integer.parseInt(priceText);
+                } catch (NumberFormatException e) {
+                    errorView = mPriceView;
+                    priceError = getString(R.string.register_sale_invalid_price);
+                }
+
+                if (itemName.isEmpty()) {
+                    errorView = mItemNameView;
+                    nameError = getString(R.string.register_sale_invalid_item_name);
+                }
+
+                if (seller.isEmpty()) {
+                    errorView = mSellerView;
+                    sellerError = getString(R.string.register_sale_invalid_seller_name);
+                }
+
+                if (errorView == null) {
 
                     Item.reportSale(itemName, seller, price, User.currentUser());
-
-                    mItemNameView.setText("");
-                    mSellerView.setText("");
-                    mReportTask = null;
+                    finish();
                 } else {
-                    errorFocusView.requestFocus();
+                    errorView.requestFocus();
+                    if (priceError != null) {
+                        mPriceView.setError(priceError);
+                    }
+                    if (nameError != null) {
+                        mItemNameView.setError(nameError);
+                    }
+                    if (sellerError != null) {
+                        mSellerView.setError(sellerError);
+                    }
                 }
             }
-            mReportTask = null;
         }
 
         @Override

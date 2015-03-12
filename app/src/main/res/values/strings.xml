@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">ShopWithFriends</string>
     <string name="action_settings">Settings</string>
+    <string name="register_sale_invalid_price">Iinvalid Price</string>
+    <string name="register_sale_invalid_item_name">Invalid Item Name</string>
+    <string name="register_sale_invalid_seller_name">Invalid Seller</string>
 </resources>

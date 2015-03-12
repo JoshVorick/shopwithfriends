@@ -164,7 +164,7 @@ public class User {
     }
 
     public int getNumberSalesReportsFromFriend(final User friend) {
-        return itemDataSource.reportedFromTo(friend, currentUser).size();
+        return itemDataSource.reportedBy(friend).size();
     }
 
     public List<User> friends() {
@@ -173,10 +173,6 @@ public class User {
 
     public List<User> notFriends() {
         return userDataSource.notFriends(this);
-    }
-
-    public List<Item> reportedTo() {
-        return itemDataSource.reportedTo(this);
     }
 
     public List<Item> reportedBy() {

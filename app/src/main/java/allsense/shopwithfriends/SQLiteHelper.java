@@ -88,7 +88,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     TABLE_REPORTED +
                     "(" +
                     REPORTED_COLUMN_ITEM_ID + " integer, " +
-                    REPORTED_COLUMN_FRIEND_ID + " integer, " +
+                    REPORTED_COLUMN_FRIEND_ID + " integer" +
                     ");"
             ;
 
