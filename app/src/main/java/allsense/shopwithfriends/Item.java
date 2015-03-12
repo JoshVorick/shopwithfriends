@@ -29,6 +29,9 @@ public class Item {
         return itemDataSource.allItems();
     }
 
+    public static List<Item> allRelevantSales(User user) {
+        return itemDataSource.allRelevantItems(user);
+    }
     public static void reportSale(final String name, final String seller, final int price, final User friend) {
         Item item = addItem(name, seller, price);
         itemDataSource.reportSale(item, friend);

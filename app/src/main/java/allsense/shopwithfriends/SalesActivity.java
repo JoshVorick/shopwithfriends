@@ -25,8 +25,10 @@ public class SalesActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales);
 
-        adapterList = Item.allSales();
-        Log.d("SWF", "current sales: " + adapterList);
+        // Get all the relevant sales the current user should see
+        Log.d("SWF", "All sales: " + Item.allSales());
+        adapterList = Item.allRelevantSales(User.currentUser());
+        Log.d("SWF", "Relevant sales: " + adapterList);
 
         adapter = new ArrayAdapter<Item>(this, R.layout.list_view_cell, adapterList);
 

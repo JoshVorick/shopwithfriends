@@ -58,7 +58,7 @@ public class ItemDataSource {
         long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String seller = cursor.getString(2);
-        int price = Integer.parseInt(cursor.getString(3));
+        int price = cursor.getInt(3);
         return new Item(name, seller, price, id);
     }
 
@@ -107,6 +107,32 @@ public class ItemDataSource {
     }
 
     /**
+     * Return a list of all Items that both match a Interest user has
+     * and are below user's treshold price
+     * @param user the user polling for relevant sales
+     */
+    public List<Item> allRelevantItems(User user) {
+        List<Item> relevantSales = new ArrayList<Item>();
+
+        List<User> friends = user.friends();
+        List<Interest> interests = user.interests();
+
+        for (User friend : friends) {
+            List<Item> friendSales = reportedBy(friend);
+            for (Item item : friendSales) {
+                // Check each item against user's interests
+                for (Interest interest : interests) {
+                    if (item.name().equals(interest.name()) && item.price() < interest.price()) {
+                        relevantSales.add(item);
+                        break;
+                    }
+                }
+            }
+        }
+        return relevantSales;
+    }
+
+    /**
      * returns a list of reported items a user has reported
      * @param user the user who reported the sales
      * @return  a list of reported items a user has reported
@@ -122,7 +148,7 @@ public class ItemDataSource {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long itemID = cursor.getLong(1);
+            long itemID = cursor.getLong(0);
             Item item = itemForID(itemID);
             items.add(item);
             cursor.moveToNext();
