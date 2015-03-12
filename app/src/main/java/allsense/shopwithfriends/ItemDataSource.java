@@ -118,7 +118,7 @@ public class ItemDataSource {
         List<Interest> interests = user.interests();
 
         for (User friend : friends) {
-            List<Item> friendSales = reportedBy(friend);
+            List<Item> friendSales = salesReportedBy(friend);
             for (Item item : friendSales) {
                 // Check each item against user's interests
                 for (Interest interest : interests) {
@@ -137,7 +137,7 @@ public class ItemDataSource {
      * @param user the user who reported the sales
      * @return  a list of reported items a user has reported
      */
-    public List<Item> reportedBy(final User user) {
+    public List<Item> salesReportedBy(final User user) {
         Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID + " = " + user.id());
         return itemsFromCursor(cursor);
     }
