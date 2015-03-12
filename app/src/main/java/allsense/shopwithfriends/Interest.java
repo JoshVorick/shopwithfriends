@@ -83,6 +83,6 @@ public class Interest {
 
     @Override
     public String toString() {
-        return "(" + name + ", " + price + ", " + id + ")";
+        return "(" + name + ", " + price + ")";
     }
 }

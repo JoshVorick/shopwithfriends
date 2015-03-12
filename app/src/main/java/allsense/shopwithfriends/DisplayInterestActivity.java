@@ -17,8 +17,8 @@ public class DisplayInterestActivity extends ActionBarActivity {
 
         TextView nameTextView = (TextView) findViewById(R.id.display_interest_name);
         nameTextView.setText("Name: " + interest.name());
-        TextView emailTextView = (TextView) findViewById(R.id.display_interest_price);
-        emailTextView.setText("Price: " + interest.price());
+        TextView priceTextView = (TextView) findViewById(R.id.display_interest_price);
+        priceTextView.setText("Price: " + interest.price());
     }
 
 

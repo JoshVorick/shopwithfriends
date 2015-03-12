@@ -32,6 +32,11 @@ public class Item {
     public static List<Item> allRelevantSales(User user) {
         return itemDataSource.allRelevantItems(user);
     }
+
+    public static Item itemForID(final long id) {
+        return itemDataSource.itemForID(id);
+    }
+
     public static void reportSale(final String name, final String seller, final int price, final User friend) {
         Item item = addItem(name, seller, price);
         itemDataSource.reportSale(item, friend);
@@ -87,6 +92,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "(" + name + ", " + seller + ", " + price + ", " + id + ")";
+        return "(" + name + ", " + seller + ", " + price + ")";
     }
 }
