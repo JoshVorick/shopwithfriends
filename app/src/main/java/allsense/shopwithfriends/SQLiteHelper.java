@@ -24,12 +24,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String ITEMS_COLUMN_ID = "_id";
     public static final String ITEMS_COLUMN_NAME = "name";
     public static final String ITEMS_COLUMN_SELLER = "seller";
+    public static final String ITEMS_COLUMN_PRICE = "price";
 
     public static final String TABLE_REPORTED = "reported";
     public static final String REPORTED_COLUMN_ITEM_ID = "item_id";
-    // from user 1 to user 2
-    public static final String REPORTED_COLUMN_FRIEND_ID_1 = "user_id1";
-    public static final String REPORTED_COLUMN_FRIEND_ID_2 = "user_id2";
+    public static final String REPORTED_COLUMN_FRIEND_ID = "user_id"; // The person who reported the sale
 
     public static final String TABLE_INTERESTS = "interests";
     public static final String INTERESTS_COLUMN_ID = "_id";
@@ -79,7 +78,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "(" +
                     ITEMS_COLUMN_ID + " integer primary key autoincrement, " +
                     ITEMS_COLUMN_NAME + " text not null, " +
-                    ITEMS_COLUMN_SELLER + " text not null" +
+                    ITEMS_COLUMN_SELLER + " text not null, " +
+                    ITEMS_COLUMN_PRICE + " integer" +
                     ");"
             ;
 
@@ -87,9 +87,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "create table if not exists " +
                     TABLE_REPORTED +
                     "(" +
-                    REPORTED_COLUMN_ITEM_ID + " integer, " +
-                    REPORTED_COLUMN_FRIEND_ID_1 + " integer, " +
-                    REPORTED_COLUMN_FRIEND_ID_2 + " integer" +
+                    REPORTED_COLUMN_FRIEND_ID + " integer, " +
+                    REPORTED_COLUMN_ITEM_ID + " integer" +
                     ");"
             ;
 

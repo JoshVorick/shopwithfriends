@@ -51,6 +51,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/report_sale_button"
+        android:text="@string/register_interest_button"
         android:onClick="registerItem" />
 </LinearLayout>

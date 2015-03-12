@@ -29,21 +29,25 @@ public class Item {
         return itemDataSource.allItems();
     }
 
-    public static void reportSale(final String name, final String seller, final User friend1, final User friend2) {
-        Item item = addItem(name, seller);
-        itemDataSource.reportSale(item, friend1, friend2);
-        Log.d("SWF", friend1 + " reported sale to " + friend2 + ": " + item);
+    public static List<Item> allRelevantSales(User user) {
+        return itemDataSource.allRelevantItems(user);
+    }
+    public static void reportSale(final String name, final String seller, final int price, final User friend) {
+        Item item = addItem(name, seller, price);
+        itemDataSource.reportSale(item, friend);
+        Log.d("SWF", friend + " reported sale of: " + item);
     }
 
-    public static Item addItem(final String name, final String seller) {
-        return itemDataSource.createItem(name, seller);
+    public static Item addItem(final String name, final String seller, final int price) {
+        return itemDataSource.createItem(name, seller, price);
     }
 
     private final String name;
     private final String seller;
+    private final int price;
     private final long id;
 
-    public Item(final String name, final String seller, final long id) {
+    public Item(final String name, final String seller, final int price, final long id) {
         if (name == null) {
             throw new IllegalArgumentException("item name is null");
         }
@@ -52,6 +56,7 @@ public class Item {
         }
         this.name = name;
         this.seller = seller;
+        this.price = price;
         this.id = id;
     }
 
@@ -67,6 +72,10 @@ public class Item {
         return seller;
     }
 
+    public int price() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Item) {
@@ -78,6 +87,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "(" + name + ", " + seller + ", " + id + ")";
+        return "(" + name + ", " + seller + ", " + price + ", " + id + ")";
     }
 }

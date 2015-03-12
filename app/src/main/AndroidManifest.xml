@@ -72,11 +72,6 @@
             android:parentActivityName=".SalesActivity" >
         </activity>
         <activity
-            android:name=".ReportToFriendActivity"
-            android:label="@string/title_report_to_friend"
-            android:parentActivityName=".SalesActivity" >
-        </activity>
-        <activity
             android:name=".InterestsActivity"
             android:label="@string/title_interests"
             android:parentActivityName=".MainMenuActivity">

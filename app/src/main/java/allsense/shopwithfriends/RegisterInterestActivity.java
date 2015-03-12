@@ -44,7 +44,7 @@ public class RegisterInterestActivity extends ActionBarActivity {
         String name = mNameTextView.getText().toString();
         if (name.isEmpty()) {
             errorView = mNameTextView;
-            nameError = getString(R.string.register_interest_invalid_price);
+            nameError = getString(R.string.register_interest_invalid_item_name);
         }
 
         if (errorView != null) {

@@ -16,12 +16,12 @@ public class ItemDataSource {
             SQLiteHelper.ITEMS_COLUMN_ID,
             SQLiteHelper.ITEMS_COLUMN_NAME,
             SQLiteHelper.ITEMS_COLUMN_SELLER,
+            SQLiteHelper.ITEMS_COLUMN_PRICE,
     };
 
     private static final String[] ALL_COLUMNS_REPORTED = {
             SQLiteHelper.REPORTED_COLUMN_ITEM_ID,
-            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1,
-            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2,
+            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID,
     };
 
     public ItemDataSource(Context context) {
@@ -58,7 +58,8 @@ public class ItemDataSource {
         long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String seller = cursor.getString(2);
-        return new Item(name, seller, id);
+        int price = cursor.getInt(3);
+        return new Item(name, seller, price, id);
     }
 
     /**
@@ -66,10 +67,11 @@ public class ItemDataSource {
      * @param name
      * @return the created item
      */
-    public Item createItem(final String name, final String seller) {
+    public Item createItem(final String name, final String seller, final int price) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.ITEMS_COLUMN_NAME, name);
         values.put(SQLiteHelper.ITEMS_COLUMN_SELLER, seller);
+        values.put(SQLiteHelper.ITEMS_COLUMN_PRICE, price);
         long insertID = database.insert(SQLiteHelper.TABLE_ITEMS, null, values);
         Cursor cursor = queryItems(SQLiteHelper.ITEMS_COLUMN_ID + " = " + insertID);
         cursor.moveToFirst();
@@ -78,17 +80,16 @@ public class ItemDataSource {
         return item;
     }
 
-    public void reportSale(final Item item, final User friend1, final User friend2) {
+    public void reportSale(final Item item, final User friend) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.REPORTED_COLUMN_ITEM_ID, item.id());
-        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1, friend1.id());
-        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2, friend2.id());
+        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID, friend.id());
         database.insert(SQLiteHelper.TABLE_REPORTED, null, values);
     }
 
     /**
      * deletes the specified item from the database
-     * @param item
+     * @param item item to delete
      */
     public void deleteItem(final Item item) {
         long id = item.id();
@@ -106,34 +107,38 @@ public class ItemDataSource {
     }
 
     /**
-     * returns a list of reported items a user has received
-     * @param user
-     * @return  a list of reported items a user has received
+     * Return a list of all Items that both match a Interest user has
+     * and are below user's treshold price
+     * @param user the user polling for relevant sales
      */
-    public List<Item> reportedTo(final User user) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2 + " = " + user.id());
-        return itemsFromCursor(cursor);
+    public List<Item> allRelevantItems(User user) {
+        List<Item> relevantSales = new ArrayList<Item>();
+
+        List<User> friends = user.friends();
+        List<Interest> interests = user.interests();
+
+        for (User friend : friends) {
+            List<Item> friendSales = reportedBy(friend);
+            for (Item item : friendSales) {
+                // Check each item against user's interests
+                for (Interest interest : interests) {
+                    if (item.name().equals(interest.name()) && item.price() < interest.price()) {
+                        relevantSales.add(item);
+                        break;
+                    }
+                }
+            }
+        }
+        return relevantSales;
     }
 
     /**
      * returns a list of reported items a user has reported
-     * @param user
+     * @param user the user who reported the sales
      * @return  a list of reported items a user has reported
      */
     public List<Item> reportedBy(final User user) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1 + " = " + user.id());
-        return itemsFromCursor(cursor);
-    }
-
-    /**
-     * returns a list of reported items friend 1 has reported to friend 2
-     * @param friend1
-     * @param friend2
-     * @return  a list of reported items friend 1 has reported to friend 2
-     */
-    public List<Item> reportedFromTo(final User friend1, final User friend2) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1 + " = " + friend1.id()
-                + " AND " + SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2 + " = " + friend2.id());
+        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID + " = " + user.id());
         return itemsFromCursor(cursor);
     }
 
@@ -143,7 +148,7 @@ public class ItemDataSource {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long itemID = cursor.getLong(1);
+            long itemID = cursor.getLong(0);
             Item item = itemForID(itemID);
             items.add(item);
             cursor.moveToNext();
