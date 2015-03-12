@@ -29,10 +29,10 @@ public class Item {
         return itemDataSource.allItems();
     }
 
-    public static void reportSale(final String name, final String seller, final String price, final User friend1, final User friend2) {
+    public static void reportSale(final String name, final String seller, final String price, final User friend) {
         Item item = addItem(name, seller, price);
-        itemDataSource.reportSale(item, friend1, friend2);
-        Log.d("SWF", friend1 + " reported sale to " + friend2 + ": " + item);
+        itemDataSource.reportSale(item, friend);
+        Log.d("SWF", friend + " reported sale of: " + item);
     }
 
     public static Item addItem(final String name, final String seller, final String price) {

@@ -21,8 +21,7 @@ public class ItemDataSource {
 
     private static final String[] ALL_COLUMNS_REPORTED = {
             SQLiteHelper.REPORTED_COLUMN_ITEM_ID,
-            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1,
-            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2,
+            SQLiteHelper.REPORTED_COLUMN_FRIEND_ID,
     };
 
     public ItemDataSource(Context context) {
@@ -81,17 +80,16 @@ public class ItemDataSource {
         return item;
     }
 
-    public void reportSale(final Item item, final User friend1, final User friend2) {
+    public void reportSale(final Item item, final User friend) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.REPORTED_COLUMN_ITEM_ID, item.id());
-        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1, friend1.id());
-        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2, friend2.id());
+        values.put(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID, friend.id());
         database.insert(SQLiteHelper.TABLE_REPORTED, null, values);
     }
 
     /**
      * deletes the specified item from the database
-     * @param item
+     * @param item item to delete
      */
     public void deleteItem(final Item item) {
         long id = item.id();
@@ -109,34 +107,12 @@ public class ItemDataSource {
     }
 
     /**
-     * returns a list of reported items a user has received
-     * @param user
-     * @return  a list of reported items a user has received
-     */
-    public List<Item> reportedTo(final User user) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2 + " = " + user.id());
-        return itemsFromCursor(cursor);
-    }
-
-    /**
      * returns a list of reported items a user has reported
-     * @param user
+     * @param user the user who reported the sales
      * @return  a list of reported items a user has reported
      */
     public List<Item> reportedBy(final User user) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1 + " = " + user.id());
-        return itemsFromCursor(cursor);
-    }
-
-    /**
-     * returns a list of reported items friend 1 has reported to friend 2
-     * @param friend1
-     * @param friend2
-     * @return  a list of reported items friend 1 has reported to friend 2
-     */
-    public List<Item> reportedFromTo(final User friend1, final User friend2) {
-        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_1 + " = " + friend1.id()
-                + " AND " + SQLiteHelper.REPORTED_COLUMN_FRIEND_ID_2 + " = " + friend2.id());
+        Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID + " = " + user.id());
         return itemsFromCursor(cursor);
     }
 

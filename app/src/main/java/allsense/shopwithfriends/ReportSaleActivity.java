@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ public class ReportSaleActivity extends ActionBarActivity {
         mItemNameView = (EditText) findViewById(R.id.itemNameEditText);
         mSellerView = (EditText) findViewById(R.id.sellerEditText);
         mPriceView = (EditText) findViewById(R.id.priceEditText);
+
+        Log.d("SWF", "report sale");
     }
 
     @Override
@@ -74,15 +77,11 @@ public class ReportSaleActivity extends ActionBarActivity {
                     String seller = mSellerView.getText().toString();
                     String price = mPriceView.getText().toString();
 
+                    Item.reportSale(itemName, seller, price, User.currentUser());
+
                     mItemNameView.setText("");
                     mSellerView.setText("");
                     mReportTask = null;
-
-                    Intent intent = new Intent(ReportSaleActivity.this, ReportToFriendActivity.class);
-                    intent.putExtra("itemName", itemName);
-                    intent.putExtra("seller", seller);
-                    intent.putExtra("price", price);
-                    startActivity(intent);
                 } else {
                     errorFocusView.requestFocus();
                 }

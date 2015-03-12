@@ -28,9 +28,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_REPORTED = "reported";
     public static final String REPORTED_COLUMN_ITEM_ID = "item_id";
-    // from user 1 to user 2
-    public static final String REPORTED_COLUMN_FRIEND_ID_1 = "user_id1";
-    public static final String REPORTED_COLUMN_FRIEND_ID_2 = "user_id2";
+    public static final String REPORTED_COLUMN_FRIEND_ID = "user_id"; // The person who reported the sale
 
     public static final String TABLE_INTERESTS = "interests";
     public static final String INTERESTS_COLUMN_ID = "_id";
@@ -90,8 +88,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     TABLE_REPORTED +
                     "(" +
                     REPORTED_COLUMN_ITEM_ID + " integer, " +
-                    REPORTED_COLUMN_FRIEND_ID_1 + " integer, " +
-                    REPORTED_COLUMN_FRIEND_ID_2 + " integer" +
+                    REPORTED_COLUMN_FRIEND_ID + " integer, " +
                     ");"
             ;
 

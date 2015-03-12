@@ -19,7 +19,6 @@ public class SalesActivity extends ActionBarActivity {
     private ListView listView;
     private ArrayAdapter<Item> adapter;
     private List<Item> adapterList;
-    private boolean viewingRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
