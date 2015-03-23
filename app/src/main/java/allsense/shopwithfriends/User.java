@@ -23,10 +23,6 @@ public class User {
         Log.d("SWF", "setting current user to " + user);
     }
 
-    /**
-     * Called in SWFApplication
-     * @param context
-     */
     public static void init(final Context context) {
         userDataSource = new UserDataSource(context);
         itemDataSource = new ItemDataSource(context);

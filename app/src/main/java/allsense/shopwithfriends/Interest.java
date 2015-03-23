@@ -8,10 +8,6 @@ import java.util.List;
 public class Interest {
     private static InterestDataSource interestDataSource;
 
-    /**
-     * Called in SWFApplication
-     * @param context
-     */
     public static void init(final Context context) {
         interestDataSource = new InterestDataSource(context);
     }

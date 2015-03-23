@@ -8,10 +8,6 @@ import java.util.List;
 public class Item {
     private static ItemDataSource itemDataSource;
 
-    /**
-     * Called in SWFApplication
-     * @param context
-     */
     public static void init(final Context context) {
         itemDataSource = new ItemDataSource(context);
     }

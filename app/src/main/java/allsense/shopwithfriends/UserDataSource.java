@@ -43,10 +43,10 @@ public class UserDataSource {
 
     /**
      * creates a user with the parameters, stores it in the database, and returns it
-     * @param name
-     * @param email
-     * @param username
-     * @param password
+     * @param name  the name
+     * @param email  the email
+     * @param username  the username
+     * @param password  the password
      * @return  the new user
      */
     public User createUser(final String name, final String email, final String username, final String password) {
@@ -65,7 +65,7 @@ public class UserDataSource {
 
     /**
      * deletes the specified user from the database
-     * @param user
+     * @param user  the user
      */
     public void deleteUser(final User user) {
         long id = user.id();
@@ -96,7 +96,7 @@ public class UserDataSource {
      * @return  a list of all users in the database USERS
      */
     public List<User> allUsers() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
 
         Cursor cursor = queryUsers(null);
         cursor.moveToFirst();
@@ -116,7 +116,7 @@ public class UserDataSource {
      * @return  a list of friends of the user
      */
     public List<User> friends(final User user) {
-        List<User> friends = new ArrayList<User>();
+        List<User> friends = new ArrayList<>();
 
         Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user.id());
 
@@ -203,8 +203,7 @@ public class UserDataSource {
         String email = cursor.getString(2);
         String username = cursor.getString(3);
         String password = cursor.getString(4);
-        User user = new User(name, email, username, password, id);
-        return user;
+        return new User(name, email, username, password, id);
     }
 
     /**
@@ -277,13 +276,14 @@ public class UserDataSource {
 
     /**
      * makes the two users friends if they are not already friends
-     * @param user1
-     * @param user2
+     * @param user1  first user
+     * @param user2  second user
      */
     public void addFriends(final User user1, final User user2) {
         Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
                 " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id());
 
+        //noinspection TryFinallyCanBeTryWithResources
         try {
             if (!cursor.isAfterLast()) {
                 Log.e("SWF", user1 + " and " + user2 + " are already friends");
@@ -320,20 +320,17 @@ public class UserDataSource {
 
     /**
      * removes a user from friends
-     * @param user1
-     * @param user2
+     * @param user1  first user
+     * @param user2  second user
      */
     public void deleteFriends(final User user1, final User user2) {
-        Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
-                " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id());
 
-        try {
+        try (Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
+                " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id())) {
             if (cursor.isAfterLast()) {
                 Log.e("SWF", user1 + " and " + user2 + " have not been added to friends");
                 return;
             }
-        } finally {
-            cursor.close();
         }
 
         // both will be executed or else none if error

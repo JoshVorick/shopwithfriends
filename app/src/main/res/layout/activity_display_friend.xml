@@ -40,31 +40,31 @@
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate1"
-            android:text="1" />
+            android:text="@string/display_friend_1" />
         <Button
             android:id="@+id/display_friend_button_2"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate2"
-            android:text="2" />
+            android:text="@string/display_friend_2" />
         <Button
             android:id="@+id/display_friend_button_3"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate3"
-            android:text="3" />
+            android:text="@string/display_friend_3" />
         <Button
             android:id="@+id/display_friend_button_4"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate4"
-            android:text="4" />
+            android:text="@string/display_friend_4" />
         <Button
             android:id="@+id/display_friend_button_5"
             android:layout_width="@dimen/display_friend_rating_button_size"
             android:layout_height="wrap_content"
             android:onClick="rate5"
-            android:text="5" />
+            android:text="@string/display_friend_5" />
         </LinearLayout>
 
 </LinearLayout>

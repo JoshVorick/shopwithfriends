@@ -51,7 +51,7 @@ public class ItemDataSource {
 
     /**
      * returns the item at the cursor position
-     * @param cursor
+     * @param cursor  the cursor
      * @return  the item at the current position of the cursor
      */
     private Item itemAtCursor(Cursor cursor) {
@@ -64,7 +64,7 @@ public class ItemDataSource {
 
     /**
      * creates item to be put into database
-     * @param name
+     * @param name  item name
      * @return the created item
      */
     public Item createItem(final String name, final String seller, final int price) {
@@ -108,11 +108,11 @@ public class ItemDataSource {
 
     /**
      * Return a list of all Items that both match a Interest user has
-     * and are below user's treshold price
+     * and are below user's threshold price
      * @param user the user polling for relevant sales
      */
     public List<Item> allRelevantItems(User user) {
-        List<Item> relevantSales = new ArrayList<Item>();
+        List<Item> relevantSales = new ArrayList<>();
 
         List<User> friends = user.friends();
         List<Interest> interests = user.interests();
@@ -143,7 +143,7 @@ public class ItemDataSource {
     }
 
     private List<Item> itemsFromCursor(final Cursor cursor) {
-        List<Item> items = new ArrayList<Item>();
+        List<Item> items = new ArrayList<>();
 
         cursor.moveToFirst();
 

@@ -16,7 +16,6 @@ import java.util.List;
 
 public class SalesActivity extends ActionBarActivity {
 
-    private ListView listView;
     private ArrayAdapter<Item> adapter;
     private List<Item> adapterList;
 
@@ -30,9 +29,9 @@ public class SalesActivity extends ActionBarActivity {
         adapterList = Item.allRelevantSales(User.currentUser());
         Log.d("SWF", "Relevant sales: " + adapterList);
 
-        adapter = new ArrayAdapter<Item>(this, R.layout.list_view_cell, adapterList);
+        adapter = new ArrayAdapter<>(this, R.layout.list_view_cell, adapterList);
 
-        listView = (ListView) findViewById(R.id.sales_list_view);
+        ListView listView = (ListView) findViewById(R.id.sales_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
