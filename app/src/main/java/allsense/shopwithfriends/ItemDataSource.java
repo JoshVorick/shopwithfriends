@@ -51,7 +51,7 @@ public class ItemDataSource {
 
     /**
      * returns the item at the cursor position
-     * @param cursor
+     * @param cursor  the cursor
      * @return  the item at the current position of the cursor
      */
     private Item itemAtCursor(Cursor cursor) {
@@ -64,7 +64,7 @@ public class ItemDataSource {
 
     /**
      * creates item to be put into database
-     * @param name
+     * @param name  item name
      * @return the created item
      */
     public Item createItem(final String name, final String seller, final int price) {
@@ -108,17 +108,17 @@ public class ItemDataSource {
 
     /**
      * Return a list of all Items that both match a Interest user has
-     * and are below user's treshold price
+     * and are below user's threshold price
      * @param user the user polling for relevant sales
      */
     public List<Item> allRelevantItems(User user) {
-        List<Item> relevantSales = new ArrayList<Item>();
+        List<Item> relevantSales = new ArrayList<>();
 
         List<User> friends = user.friends();
         List<Interest> interests = user.interests();
 
         for (User friend : friends) {
-            List<Item> friendSales = reportedBy(friend);
+            List<Item> friendSales = salesReportedBy(friend);
             for (Item item : friendSales) {
                 // Check each item against user's interests
                 for (Interest interest : interests) {
@@ -137,13 +137,13 @@ public class ItemDataSource {
      * @param user the user who reported the sales
      * @return  a list of reported items a user has reported
      */
-    public List<Item> reportedBy(final User user) {
+    public List<Item> salesReportedBy(final User user) {
         Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID + " = " + user.id());
         return itemsFromCursor(cursor);
     }
 
     private List<Item> itemsFromCursor(final Cursor cursor) {
-        List<Item> items = new ArrayList<Item>();
+        List<Item> items = new ArrayList<>();
 
         cursor.moveToFirst();
 

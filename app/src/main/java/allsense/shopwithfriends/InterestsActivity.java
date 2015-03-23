@@ -28,7 +28,7 @@ public class InterestsActivity extends ActionBarActivity {
         adapterList = User.currentUser().interests();
         Log.d("SWF", "current user interests: " + adapterList);
 
-        adapter = new ArrayAdapter<Interest>(this, R.layout.list_view_cell, adapterList);
+        adapter = new ArrayAdapter<>(this, R.layout.list_view_cell, adapterList);
 
         ListView listView = (ListView) findViewById(R.id.interests_list_view);
         listView.setAdapter(adapter);

@@ -23,10 +23,6 @@ public class User {
         Log.d("SWF", "setting current user to " + user);
     }
 
-    /**
-     * Called in SWFApplication
-     * @param context
-     */
     public static void init(final Context context) {
         userDataSource = new UserDataSource(context);
         itemDataSource = new ItemDataSource(context);
@@ -164,7 +160,7 @@ public class User {
     }
 
     public int getNumberSalesReportsFromFriend(final User friend) {
-        return itemDataSource.reportedBy(friend).size();
+        return itemDataSource.salesReportedBy(friend).size();
     }
 
     public List<User> friends() {
@@ -176,15 +172,15 @@ public class User {
     }
 
     public List<Item> reportedBy() {
-        return itemDataSource.reportedBy(this);
+        return itemDataSource.salesReportedBy(this);
     }
 
     public List<Interest> interests() {
-        return interestDataSource.registered(this);
+        return interestDataSource.registeredInterests(this);
     }
 
     public List<Interest> notInterests() {
-        return interestDataSource.notRegistered(this);
+        return interestDataSource.notRegisteredInterests(this);
     }
 
     @Override
@@ -198,7 +194,6 @@ public class User {
 
     @Override
     public String toString() {
-//        return username + ": " + name;
-        return "(" + name + ", " + email + ", " + username + ")";
+        return name;
     }
 }

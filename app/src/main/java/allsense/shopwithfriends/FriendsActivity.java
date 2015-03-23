@@ -29,7 +29,7 @@ public class FriendsActivity extends ActionBarActivity {
         adapterList = User.currentUser().friends();
         Log.d("SWF", "current user friends: " + adapterList);
 
-        adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);
+        adapter = new ArrayAdapter<>(this, R.layout.list_view_cell, adapterList);
 
         ListView listView = (ListView) findViewById(R.id.friends_list_view);
         listView.setAdapter(adapter);

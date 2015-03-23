@@ -17,6 +17,7 @@ public class DisplaySaleActivity extends ActionBarActivity {
         Item item = Item.itemForID(getIntent().getLongExtra("id", 0));
         Log.d("SWF", "Item to be displayed: " + item.name());
 
+        //noinspection ConstantConditions
         if (item != null) {
             TextView nameTextView = (TextView) findViewById(R.id.display_sale_name);
             nameTextView.setText("Name: " + item.name());

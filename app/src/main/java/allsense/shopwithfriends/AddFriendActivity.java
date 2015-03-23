@@ -14,7 +14,6 @@ import java.util.List;
 
 public class AddFriendActivity extends ActionBarActivity {
 
-    private ListView listView;
     private ArrayAdapter<User> adapter;
     private List<User> adapterList;
 
@@ -27,9 +26,9 @@ public class AddFriendActivity extends ActionBarActivity {
         adapterList = User.currentUser().notFriends();
         Log.d("SWF", "users current user can add as friend: " + adapterList);
 
-        adapter = new ArrayAdapter<User>(this, R.layout.list_view_cell, adapterList);
+        adapter = new ArrayAdapter<>(this, R.layout.list_view_cell, adapterList);
 
-        listView = (ListView) findViewById(R.id.add_friends_list_view);
+        ListView listView = (ListView) findViewById(R.id.add_friends_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

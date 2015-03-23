@@ -1,3 +1,8 @@
 <resources>
     <string name="title_display_friend">DisplayFriendActivity</string>
+    <string name="display_friend_1">1</string>
+    <string name="display_friend_2">2</string>
+    <string name="display_friend_3">3</string>
+    <string name="display_friend_4">4</string>
+    <string name="display_friend_5">5</string>
 </resources>

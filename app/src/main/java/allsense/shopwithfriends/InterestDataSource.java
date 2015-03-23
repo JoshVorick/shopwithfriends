@@ -83,7 +83,7 @@ public class InterestDataSource {
     }
 
     private List<Interest> interestsFromCursor(final Cursor cursor) {
-        List<Interest> interests = new ArrayList<Interest>();
+        List<Interest> interests = new ArrayList<>();
 
         cursor.moveToFirst();
 
@@ -99,10 +99,10 @@ public class InterestDataSource {
         return interests;
     }
 
-    public List<Interest> registered(final User user) {
+    public List<Interest> registeredInterests(final User user) {
         Cursor cursor = queryRegistered(SQLiteHelper.REGISTERED_COLUMN_USER_ID + " = " + user.id());
         cursor.moveToFirst();
-        List<Interest> interests = new ArrayList<Interest>();
+        List<Interest> interests = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             long interestID = cursor.getLong(1);
             interests.add(interestForID(interestID));
@@ -111,9 +111,9 @@ public class InterestDataSource {
         return interests;
     }
 
-    public List<Interest> notRegistered(final User user) {
+    public List<Interest> notRegisteredInterests(final User user) {
         List<Interest> interests = allInterests();
-        List<Interest> subset = registered(user);
+        List<Interest> subset = registeredInterests(user);
         interests.removeAll(subset);
         return interests;
     }
