@@ -34,4 +34,9 @@ public class MainMenuActivity extends ActionBarActivity {
         Intent intent = new Intent(this, InterestsActivity.class);
         startActivity(intent);
     }
+
+    public void toMaps(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
 }

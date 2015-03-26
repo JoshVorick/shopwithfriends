@@ -35,4 +35,12 @@
         android:textSize="@dimen/main_menu_button_text_size"
         android:onClick="toInterests" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="@dimen/main_menu_button_width"
+        android:layout_height="wrap_content"
+        android:text="@string/main_menu_map"
+        android:textSize="@dimen/main_menu_button_text_size"
+        android:onClick="toMaps" />
+
 </LinearLayout>
