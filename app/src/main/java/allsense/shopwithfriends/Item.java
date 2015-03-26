@@ -33,22 +33,24 @@ public class Item {
         return itemDataSource.itemForID(id);
     }
 
-    public static void reportSale(final String name, final String seller, final int price, final User friend) {
-        Item item = addItem(name, seller, price);
+    public static void reportSale(final String name, final String seller, final int price, final float latitude, final float longitude, final User friend) {
+        Item item = addItem(name, seller, price, latitude, longitude);
         itemDataSource.reportSale(item, friend);
         Log.d("SWF", friend + " reported sale of: " + item);
     }
 
-    public static Item addItem(final String name, final String seller, final int price) {
-        return itemDataSource.createItem(name, seller, price);
+    public static Item addItem(final String name, final String seller, final int price, final float latitude, final float longitude) {
+        return itemDataSource.createItem(name, seller, price, latitude, longitude);
     }
 
     private final String name;
     private final String seller;
+    private final float latitude;
+    private final float longitude;
     private final int price;
     private final long id;
 
-    public Item(final String name, final String seller, final int price, final long id) {
+    public Item(final String name, final String seller, final int price, final float latitude, final float longitude, final long id) {
         if (name == null) {
             throw new IllegalArgumentException("item name is null");
         }
@@ -58,11 +60,9 @@ public class Item {
         this.name = name;
         this.seller = seller;
         this.price = price;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.id = id;
-    }
-
-    public long id() {
-        return id;
     }
 
     public String name() {
@@ -75,6 +75,18 @@ public class Item {
 
     public int price() {
         return price;
+    }
+
+    public float latitude() {
+        return latitude;
+    }
+
+    public float longitude() {
+        return longitude;
+    }
+
+    public long id() {
+        return id;
     }
 
     @Override
