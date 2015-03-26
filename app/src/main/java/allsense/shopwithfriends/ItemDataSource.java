@@ -17,6 +17,8 @@ public class ItemDataSource {
             SQLiteHelper.ITEMS_COLUMN_NAME,
             SQLiteHelper.ITEMS_COLUMN_SELLER,
             SQLiteHelper.ITEMS_COLUMN_PRICE,
+            SQLiteHelper.ITEMS_COLUMN_LATITUDE,
+            SQLiteHelper.ITEMS_COLUMN_LONGITUDE,
     };
 
     private static final String[] ALL_COLUMNS_REPORTED = {
@@ -59,7 +61,9 @@ public class ItemDataSource {
         String name = cursor.getString(1);
         String seller = cursor.getString(2);
         int price = cursor.getInt(3);
-        return new Item(name, seller, price, id);
+        float latitude = cursor.getFloat(4);
+        float longitude = cursor.getFloat(5);
+        return new Item(name, seller, price, latitude, longitude, id);
     }
 
     /**
@@ -67,11 +71,13 @@ public class ItemDataSource {
      * @param name  item name
      * @return the created item
      */
-    public Item createItem(final String name, final String seller, final int price) {
+    public Item createItem(final String name, final String seller, final int price, final float latitude, final float longitude) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.ITEMS_COLUMN_NAME, name);
         values.put(SQLiteHelper.ITEMS_COLUMN_SELLER, seller);
         values.put(SQLiteHelper.ITEMS_COLUMN_PRICE, price);
+        values.put(SQLiteHelper.ITEMS_COLUMN_LATITUDE, latitude);
+        values.put(SQLiteHelper.ITEMS_COLUMN_LONGITUDE, longitude);
         long insertID = database.insert(SQLiteHelper.TABLE_ITEMS, null, values);
         Cursor cursor = queryItems(SQLiteHelper.ITEMS_COLUMN_ID + " = " + insertID);
         cursor.moveToFirst();

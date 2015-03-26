@@ -14,6 +14,8 @@ public class ReportSaleActivity extends ActionBarActivity {
     private EditText mItemNameView;
     private EditText mSellerView;
     private EditText mPriceView;
+    private EditText mLatitudeView;
+    private EditText mLongitudeView;
     private ItemReportTask mReportTask;
 
     @Override
@@ -24,6 +26,8 @@ public class ReportSaleActivity extends ActionBarActivity {
         mItemNameView = (EditText) findViewById(R.id.itemNameEditText);
         mSellerView = (EditText) findViewById(R.id.sellerEditText);
         mPriceView = (EditText) findViewById(R.id.priceEditText);
+        mLatitudeView = (EditText) findViewById(R.id.latitudeEditText);
+        mLongitudeView = (EditText) findViewById(R.id.longitudeEditText);
 
         Log.d("SWF", "report sale");
     }
@@ -68,17 +72,35 @@ public class ReportSaleActivity extends ActionBarActivity {
                 CharSequence nameError = null;
                 CharSequence sellerError = null;
                 CharSequence priceError = null;
+                CharSequence latitudeError = null;
+                CharSequence longitudeError = null;
 
                 String itemName = mItemNameView.getText().toString();
                 String seller = mSellerView.getText().toString();
                 String priceText = mPriceView.getText().toString();
+                String latitudeText = mLatitudeView.getText().toString();
+                String longitudeText = mLongitudeView.getText().toString();
                 int price = 0;
+                float latitude = 0;
+                float longitude = 0;
 
                 try {
                     price = Integer.parseInt(priceText);
                 } catch (NumberFormatException e) {
                     errorView = mPriceView;
                     priceError = getString(R.string.register_sale_invalid_price);
+                }
+                try {
+                    latitude = Float.parseFloat(latitudeText);
+                } catch (NumberFormatException e) {
+                    errorView = mLatitudeView;
+                    latitudeError = getString(R.string.register_sale_invalid_latitude);
+                }
+                try {
+                    longitude = Float.parseFloat(longitudeText);
+                } catch (NumberFormatException e) {
+                    errorView = mLongitudeView;
+                    longitudeError = getString(R.string.register_sale_invalid_longitude);
                 }
 
                 if (itemName.isEmpty()) {
@@ -93,18 +115,24 @@ public class ReportSaleActivity extends ActionBarActivity {
 
                 if (errorView == null) {
 
-                    Item.reportSale(itemName, seller, price, User.currentUser());
+                    Item.reportSale(itemName, seller, price, longitude, latitude, User.currentUser());
                     finish();
                 } else {
                     errorView.requestFocus();
-                    if (priceError != null) {
-                        mPriceView.setError(priceError);
-                    }
                     if (nameError != null) {
                         mItemNameView.setError(nameError);
                     }
                     if (sellerError != null) {
                         mSellerView.setError(sellerError);
+                    }
+                    if (priceError != null) {
+                        mPriceView.setError(priceError);
+                    }
+                    if (latitudeError != null) {
+                        mPriceView.setError(latitudeError);
+                    }
+                    if (longitudeError != null) {
+                        mPriceView.setError(longitudeError);
                     }
                 }
             }
