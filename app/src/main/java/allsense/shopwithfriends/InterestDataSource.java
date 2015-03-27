@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterestDataSource {
-    private SQLiteDatabase database;
-    private SQLiteHelper dbHelper;
+class InterestDataSource {
+    private final SQLiteDatabase database;
+    private final SQLiteHelper dbHelper;
 
     private static final String[] ALL_COLUMNS_INTERESTS = {
             SQLiteHelper.INTERESTS_COLUMN_ID,
@@ -35,11 +35,11 @@ public class InterestDataSource {
         dbHelper.close();
     }
 
-    public Cursor queryInterests(final String selection) {
+    Cursor queryInterests(final String selection) {
         return database.query(SQLiteHelper.TABLE_INTERESTS, ALL_COLUMNS_INTERESTS, selection, null, null, null, null);
     }
 
-    public Cursor queryRegistered(final String selection) {
+    Cursor queryRegistered(final String selection) {
         return database.query(SQLiteHelper.TABLE_REGISTERED, ALL_COLUMNS_REGISTERED, selection, null, null, null, null);
     }
 
@@ -77,7 +77,7 @@ public class InterestDataSource {
         database.delete(SQLiteHelper.TABLE_REGISTERED, SQLiteHelper.REGISTERED_COLUMN_INTEREST_ID + " = " + id, null);
     }
 
-    public List<Interest> allInterests() {
+    List<Interest> allInterests() {
         Cursor cursor = queryInterests(null);
         return interestsFromCursor(cursor);
     }

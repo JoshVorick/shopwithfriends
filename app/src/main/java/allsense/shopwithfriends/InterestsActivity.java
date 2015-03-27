@@ -47,7 +47,7 @@ public class InterestsActivity extends ActionBarActivity {
             }
         });
     }
-    public void displayInterest(final Interest interest) {
+    void displayInterest(final Interest interest) {
         Intent intent = new Intent(this, DisplayInterestActivity.class);
         intent.putExtra("id", interest.id());
         startActivity(intent);
@@ -60,7 +60,7 @@ public class InterestsActivity extends ActionBarActivity {
         Log.d("SWF", "onRestart");
     }
 
-    public void refreshList() {
+    void refreshList() {
         adapterList.clear();
         adapterList.addAll(User.currentUser().interests());
         adapter.notifyDataSetChanged();

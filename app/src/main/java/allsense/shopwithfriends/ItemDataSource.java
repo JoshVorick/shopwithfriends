@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDataSource {
-    private SQLiteDatabase database;
-    private SQLiteHelper dbHelper;
+class ItemDataSource {
+    private final SQLiteDatabase database;
+    private final SQLiteHelper dbHelper;
 
     private static final String[] ALL_COLUMNS_ITEMS = {
             SQLiteHelper.ITEMS_COLUMN_ID,
@@ -43,11 +43,11 @@ public class ItemDataSource {
      * @param selection  the condition to match against, null for all rows
      * @return  all rows that match selection
      */
-    public Cursor queryItems(final String selection) {
+    Cursor queryItems(final String selection) {
         return database.query(SQLiteHelper.TABLE_ITEMS, ALL_COLUMNS_ITEMS, selection, null, null, null, null);
     }
 
-    public Cursor queryReported(final String selection) {
+    Cursor queryReported(final String selection) {
         return database.query(SQLiteHelper.TABLE_REPORTED, ALL_COLUMNS_REPORTED, selection, null, null, null, null);
     }
 
@@ -97,11 +97,11 @@ public class ItemDataSource {
      * deletes the specified item from the database
      * @param item item to delete
      */
-    public void deleteItem(final Item item) {
-        long id = item.id();
-        System.out.println("deleting item " + item);
-        database.delete(SQLiteHelper.TABLE_ITEMS, SQLiteHelper.ITEMS_COLUMN_ID + " = " + id, null);
-    }
+//    public void deleteItem(final Item item) {
+//        long id = item.id();
+//        System.out.println("deleting item " + item);
+//        database.delete(SQLiteHelper.TABLE_ITEMS, SQLiteHelper.ITEMS_COLUMN_ID + " = " + id, null);
+//    }
 
     /**
      *

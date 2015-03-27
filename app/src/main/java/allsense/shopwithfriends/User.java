@@ -171,17 +171,17 @@ public class User {
         return userDataSource.notFriends(this);
     }
 
-    public List<Item> reportedBy() {
-        return itemDataSource.salesReportedBy(this);
-    }
+//    public List<Item> reportedBy() {
+//        return itemDataSource.salesReportedBy(this);
+//    }
 
     public List<Interest> interests() {
         return interestDataSource.registeredInterests(this);
     }
 
-    public List<Interest> notInterests() {
-        return interestDataSource.notRegisteredInterests(this);
-    }
+//    public List<Interest> notInterests() {
+//        return interestDataSource.notRegisteredInterests(this);
+//    }
 
     @Override
     public boolean equals(Object o) {

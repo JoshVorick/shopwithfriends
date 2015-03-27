@@ -99,7 +99,7 @@ public class DisplayFriendActivity extends ActionBarActivity {
     /**
      * writes new rating into database
      */
-    public void rateFriend() {
+    void rateFriend() {
         if (rateTask == null) {
             rateTask = new RateFriendTask();
             rateTask.execute();

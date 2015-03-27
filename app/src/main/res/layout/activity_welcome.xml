@@ -33,7 +33,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="@dimen/welcome_button_width"
         android:layout_height="wrap_content"
-        android:text="Reset database"
+        android:text="@string/welcome_reset_database"
         android:textSize="@dimen/welcome_button_text_size"
         android:onClick="resetDatabase" />
 

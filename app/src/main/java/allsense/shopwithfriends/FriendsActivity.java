@@ -50,7 +50,7 @@ public class FriendsActivity extends ActionBarActivity {
         });
     }
 
-    public void displayFriend(final User user) {
+    void displayFriend(final User user) {
         Intent intent = new Intent(this, DisplayFriendActivity.class);
         intent.putExtra("id", user.id());
         startActivity(intent);
@@ -63,7 +63,7 @@ public class FriendsActivity extends ActionBarActivity {
         refreshList();
     }
 
-    public void refreshList() {
+    void refreshList() {
         adapter.notifyDataSetChanged();
     }
 

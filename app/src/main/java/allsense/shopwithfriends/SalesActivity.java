@@ -42,7 +42,7 @@ public class SalesActivity extends ActionBarActivity {
         });
     }
 
-    public void displaySale(final Item item) {
+    void displaySale(final Item item) {
         Intent intent = new Intent(this, DisplaySaleActivity.class);
         intent.putExtra("id", item.id());
         startActivity(intent);
@@ -55,7 +55,7 @@ public class SalesActivity extends ActionBarActivity {
         refreshList();
     }
 
-    public void refreshList() {
+    void refreshList() {
         adapter.notifyDataSetChanged();
     }
 
