@@ -12,8 +12,6 @@ public class UserDataSourceTest extends ActivityInstrumentationTestCase2<Welcome
 
     // Arthur Eubanks
     public void testAddFriends() {
-        Log.e("Test", "UserDataSourceTest.testAddFriends");
-
         UserDataSource source = new UserDataSource(getActivity().getApplicationContext());
         User user1 = User.addUser("name1", "email1", "user1", "pass1");
         User user2 = User.addUser("name2", "email2", "user2", "pass2");
