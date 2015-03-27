@@ -2,19 +2,28 @@ package allsense.shopwithfriends;
 
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 public class UserDataSourceTest extends ActivityInstrumentationTestCase2<WelcomeActivity> {
+    UserDataSource source;
+    User user1;
+    User user2;
 
     public UserDataSourceTest() {
         super(WelcomeActivity.class);
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        source = new UserDataSource(getActivity().getApplicationContext());
+        user1 = User.addUser("name1", "email1", "user1", "pass1");
+        user2 = User.addUser("name2", "email2", "user2", "pass2");
+    }
+
     // Arthur Eubanks
     public void testAddFriends() {
-        UserDataSource source = new UserDataSource(getActivity().getApplicationContext());
-        User user1 = User.addUser("name1", "email1", "user1", "pass1");
-        User user2 = User.addUser("name2", "email2", "user2", "pass2");
+
 
         assertFalse(user1.friends().contains(user2));
         assertFalse(user2.friends().contains(user1));
@@ -25,13 +34,9 @@ public class UserDataSourceTest extends ActivityInstrumentationTestCase2<Welcome
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
+        source.deleteUser(user1);
+        source.deleteUser(user2);
 
-        UserDataSource source = new UserDataSource(getActivity().getApplicationContext());
-        for (User u : source.allUsers()) {
-            if (u.name().contains("name")) {
-                source.deleteUser(u);
-            }
-        }
+        super.tearDown();
     }
 }
