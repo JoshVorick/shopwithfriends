@@ -23,13 +23,18 @@ public class UserDataSourceTest extends ActivityInstrumentationTestCase2<Welcome
 
     // Arthur Eubanks
     public void testAddFriends() {
-
-
         assertFalse(user1.friends().contains(user2));
         assertFalse(user2.friends().contains(user1));
         source.addFriends(user1, user2);
         assertTrue(user1.friends().contains(user2));
         assertTrue(user2.friends().contains(user1));
+    }
+
+    public void testRating() {
+        user1.rate(user2, 4);
+//        source.rate(user1, user2, 4);
+        assertEquals(0, user1.rating());
+        assertEquals(4, user2.rating());
     }
 
     @Override

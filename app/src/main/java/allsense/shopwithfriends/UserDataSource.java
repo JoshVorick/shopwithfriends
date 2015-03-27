@@ -244,9 +244,13 @@ class UserDataSource {
         }
         cursor.close();
         if (count == 0) {
+
+            Log.d("SWF", "zero ratings");
             return 0;
         } else {
             double rating = total / count;
+
+            Log.d("SWF", "rating: " + rating);
             return (int) (rating + 0.5);
         }
     }
@@ -280,6 +284,11 @@ class UserDataSource {
      * @param user2  second user
      */
     public void addFriends(final User user1, final User user2) {
+        if (user1.id() == user2.id()) {
+            Log.e("SWF", "adding self as friend");
+            return;
+        }
+
         Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
                 " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id());
 
