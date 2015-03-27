@@ -7,7 +7,7 @@ import android.util.Log;
 
 // http://www.vogella.com/tutorials/AndroidSQLite/article.html
 
-public class SQLiteHelper extends SQLiteOpenHelper {
+class SQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_USERS = "users";
     public static final String USERS_COLUMN_ID = "_id";
     public static final String USERS_COLUMN_NAME = "name";
@@ -158,7 +158,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
      * deletes all tables in the database
      * @param db  the database
      */
-    public void deleteDatabase(SQLiteDatabase db) {
+    void deleteDatabase(SQLiteDatabase db) {
         for (String table : ALL_TABLES) {
             db.execSQL("DROP TABLE IF EXISTS " + table);
         }

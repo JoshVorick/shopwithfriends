@@ -52,7 +52,7 @@ public class LoginActivity extends ActionBarActivity {
         return false;
     }
 
-    public void attemptLogin() {
+    void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
@@ -61,7 +61,7 @@ public class LoginActivity extends ActionBarActivity {
         task.execute();
     }
 
-    public class UserLoginTask extends AsyncTask<Void, Void, User> {
+    private class UserLoginTask extends AsyncTask<Void, Void, User> {
 
         @Override
         protected User doInBackground(Void... params) {

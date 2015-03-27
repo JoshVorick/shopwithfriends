@@ -42,7 +42,7 @@ public class AddFriendActivity extends ActionBarActivity {
         });
     }
 
-    public void refreshList() {
+    void refreshList() {
         adapter.notifyDataSetChanged();
     }
 

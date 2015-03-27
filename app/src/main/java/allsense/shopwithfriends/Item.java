@@ -39,7 +39,7 @@ public class Item {
         Log.d("SWF", friend + " reported sale of: " + item);
     }
 
-    public static Item addItem(final String name, final String seller, final int price, final float latitude, final float longitude) {
+    private static Item addItem(final String name, final String seller, final int price, final float latitude, final float longitude) {
         return itemDataSource.createItem(name, seller, price, latitude, longitude);
     }
 

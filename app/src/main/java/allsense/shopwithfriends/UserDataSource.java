@@ -11,9 +11,9 @@ import java.util.List;
 
 // http://www.vogella.com/tutorials/AndroidSQLite/article.html
 
-public class UserDataSource {
-    private SQLiteDatabase database;
-    private SQLiteHelper dbHelper;
+class UserDataSource {
+    private final SQLiteDatabase database;
+    private final SQLiteHelper dbHelper;
 
     private static final String[] ALL_COLUMNS_USERS = {
             SQLiteHelper.USERS_COLUMN_ID,
@@ -78,7 +78,7 @@ public class UserDataSource {
      * @param selection  the condition to match against, null for all rows
      * @return  all rows that match selection
      */
-    public Cursor queryUsers(final String selection) {
+    Cursor queryUsers(final String selection) {
         return database.query(SQLiteHelper.TABLE_USERS, ALL_COLUMNS_USERS, selection, null, null, null, null);
     }
 
@@ -87,7 +87,7 @@ public class UserDataSource {
      * @param selection  the condition to match against, null for all rows
      * @return  all rows that match selection
      */
-    public Cursor queryFriends(final String selection) {
+    Cursor queryFriends(final String selection) {
         return database.query(SQLiteHelper.TABLE_FRIENDS, ALL_COLUMNS_FRIENDS, selection, null, null, null, null);
     }
 
@@ -244,9 +244,13 @@ public class UserDataSource {
         }
         cursor.close();
         if (count == 0) {
+
+            Log.d("SWF", "zero ratings");
             return 0;
         } else {
             double rating = total / count;
+
+            Log.d("SWF", "rating: " + rating);
             return (int) (rating + 0.5);
         }
     }
@@ -280,6 +284,11 @@ public class UserDataSource {
      * @param user2  second user
      */
     public void addFriends(final User user1, final User user2) {
+        if (user1.id() == user2.id()) {
+            Log.e("SWF", "adding self as friend");
+            return;
+        }
+
         Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
                 " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id());
 
@@ -325,12 +334,11 @@ public class UserDataSource {
      */
     public void deleteFriends(final User user1, final User user2) {
 
-        try (Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
-                " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id())) {
-            if (cursor.isAfterLast()) {
-                Log.e("SWF", user1 + " and " + user2 + " have not been added to friends");
-                return;
-            }
+        Cursor cursor = queryFriends(SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_1 + " = " + user1.id() +
+                " AND " + SQLiteHelper.FRIENDS_COLUMN_FRIEND_ID_2 + " = " + user2.id());
+        if (cursor.isAfterLast()) {
+            Log.e("SWF", user1 + " and " + user2 + " have not been added to friends");
+            return;
         }
 
         // both will be executed or else none if error

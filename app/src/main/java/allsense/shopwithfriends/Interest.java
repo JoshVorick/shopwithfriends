@@ -21,9 +21,9 @@ public class Interest {
         }
     }
 
-    public static List<Interest> allInterests() {
-        return interestDataSource.allInterests();
-    }
+//    public static List<Interest> allInterests() {
+//        return interestDataSource.allInterests();
+//    }
 
     public static void registerInterest(final User user, final String name, final int price) {
         Interest interest = addInterest(name, price);
@@ -31,7 +31,7 @@ public class Interest {
         Log.d("SWF", "registered " + interest + " to user " + user);
     }
 
-    public static Interest addInterest(final String name, final int price) {
+    private static Interest addInterest(final String name, final int price) {
         return interestDataSource.createInterest(name, price);
     }
 
