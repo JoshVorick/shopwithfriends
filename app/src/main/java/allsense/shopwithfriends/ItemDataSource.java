@@ -128,7 +128,8 @@ class ItemDataSource {
             for (Item item : friendSales) {
                 // Check each item against user's interests
                 for (Interest interest : interests) {
-                    if (item.name().equals(interest.name()) && item.price() < interest.price()) {
+                    if (item.name().toLowerCase().equals(interest.name().toLowerCase())
+                            && item.price() < interest.price()) {
                         relevantSales.add(item);
                         break;
                     }
@@ -146,6 +147,28 @@ class ItemDataSource {
     public List<Item> salesReportedBy(final User user) {
         Cursor cursor = queryReported(SQLiteHelper.REPORTED_COLUMN_FRIEND_ID + " = " + user.id());
         return itemsFromCursor(cursor);
+    }
+
+    /**
+     * returns a list of relevant items a friend has reported
+     * @param user
+     * @param friend
+     * @return the list of reported items
+     */
+    public List<Item> relevantSalesReportedBy(final User user, final User friend) {
+        List<Item> relevantSales = salesReportedBy(friend);
+        List<Interest> interests = user.interests();
+        for (Item item : relevantSales) {
+            // Check each item against user's interests
+            for (Interest interest : interests) {
+                if (item.name().toLowerCase().equals(interest.name().toLowerCase())
+                        && item.price() < interest.price()) {
+                    relevantSales.add(item);
+                    break;
+                }
+            }
+        }
+        return relevantSales;
     }
 
     private List<Item> itemsFromCursor(final Cursor cursor) {
