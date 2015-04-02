@@ -3,8 +3,10 @@ package allsense.shopwithfriends;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -19,6 +21,7 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     @Override
@@ -53,6 +56,8 @@ public class MapsActivity extends FragmentActivity {
                 setUpMap();
             }
         }
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
     }
 
     /**
@@ -69,6 +74,7 @@ public class MapsActivity extends FragmentActivity {
             String seller = item.seller();
             if (longitude != 0 || latitude != 0) {
                 mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(seller));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
             }
         }
     }
