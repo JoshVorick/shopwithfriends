@@ -129,7 +129,7 @@ class ItemDataSource {
                 // Check each item against user's interests
                 for (Interest interest : interests) {
                     if (item.name().toLowerCase().equals(interest.name().toLowerCase())
-                            && item.price() < interest.price()) {
+                            && item.price() <= interest.price()) {
                         relevantSales.add(item);
                         break;
                     }
@@ -162,7 +162,7 @@ class ItemDataSource {
             // Check each item against user's interests
             for (Interest interest : interests) {
                 if (item.name().toLowerCase().equals(interest.name().toLowerCase())
-                        && item.price() < interest.price()) {
+                        && item.price() <= interest.price()) {
                     relevantSales.add(item);
                     break;
                 }
