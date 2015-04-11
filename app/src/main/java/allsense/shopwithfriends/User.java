@@ -160,7 +160,7 @@ public class User {
     }
 
     public int getNumberSalesReportsFromFriend(final User friend) {
-        return itemDataSource.salesReportedBy(friend).size();
+        return itemDataSource.relevantSalesReportedBy(currentUser, friend).size();
     }
 
     public List<User> friends() {
